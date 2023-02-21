@@ -1,15 +1,31 @@
 extends Node2D
 
+var isMine = 0
 var status = 0
+var r
+var c
+var grid
 # 0 closed
 # 1 open
 # 2 flagged
 # TODO: enum?
+func uncover():
+	$TileUnopened.visible = false
+	if isMine:
+		$TileMine.visible = true
+	else:
+		$TileOpened.visible = true
+		$Proximity.visible = true
+		
+	if status == 0 and $Proximity.text == "":
+		status = 1
+		grid.uncover(r,c)
 
 func _on_Control_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed and status == 0:
-			$TileOpened.visible = true
-			$Proximity.visible = true
+			uncover()
+		
 		elif event.button_index == BUTTON_RIGHT and event.pressed and status == 0:
+			status = 2
 			$TileFlag.visible = true
