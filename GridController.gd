@@ -5,9 +5,23 @@ var collumnCount = 15
 var bombCount = 15
 var grid = []
 var Tile = preload("res://Tile.tscn")
+var Player = preload("res://Player.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	createGrid()
+	setBombs()
+	countProximities()
+	spawnPlayer()
+
+func spawnPlayer():
+	Player = preload("res://Player.tscn")
+	Player = Player.instance()
+	Player.position = Vector2(7,7) * 16
+	Player.grid = self
+	add_child(Player)
+
+func createGrid():
 	for r in rowCount:
 		grid.append([])
 		for c in collumnCount:
@@ -18,9 +32,7 @@ func _ready():
 			tile.grid = self
 			add_child(tile)
 			grid[r].append(tile)
-	setBombs()
-	countProximities()
-	
+			
 func setBombs():
 	var bombs = 0
 	while bombs < bombCount:
@@ -52,6 +64,11 @@ func uncover(row, collumn):
 		for c in range(collumn-1, collumn+2):
 			if(r >= 0 and r < rowCount and c >= 0 and c < collumnCount):
 				grid[r][c].uncover()
+				
+func updateBoard():
+	var r = Player.position.y/16
+	var c = Player.position.x/16
+	grid[r][c].uncover()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
