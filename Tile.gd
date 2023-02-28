@@ -1,6 +1,6 @@
 extends Node2D
 
-var isMine = 0
+var isMine = false
 var status = 0
 var r
 var c

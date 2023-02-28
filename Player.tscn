@@ -97,4 +97,4 @@ current = true
 zoom = Vector2( 0.3, 0.3 )
 
 [node name="GameOver" parent="." instance=ExtResource( 3 )]
-visible = false
+position = Vector2( 8, 8 )
