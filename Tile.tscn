@@ -29,6 +29,7 @@ valign = 2
 max_lines_visible = 1
 
 [node name="Control" type="Control" parent="."]
+visible = false
 margin_right = 16.0
 margin_bottom = 16.0
 

@@ -2,6 +2,7 @@ extends Node2D
 
 
 var grid
+var goalPosition
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var animatedSprite = get_node("AnimatedSprite")
@@ -22,5 +23,5 @@ func _input(event):
 		var gameOver = get_node("GameOver")
 		gameOver.visible = true
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	pass

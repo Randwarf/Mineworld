@@ -9,13 +9,7 @@ var Player = preload("res://Player.tscn")
 var PlayerR = rowCount/2
 var PlayerC = collumnCount/2
 
-# Called when the node enters the scene tree for the first time.
-func _init():
-	var timeStart = OS.get_unix_time()
-	print("creating NOTHING")
-	OS.delay_msec(2000)
-	print("Done creating NOTHING", OS.get_unix_time()-timeStart)
-	
+# Called when the node enters the scene tree for the first time.	
 func _ready():
 	var timeStart = OS.get_unix_time()
 	print("creating grid")
@@ -41,7 +35,7 @@ func _ready():
 	print("Done spawning player", OS.get_unix_time()-timeStart)
 	timeStart = OS.get_unix_time()
 	print("initial uncover")
-	uncover(PlayerR, PlayerC)
+	updateBoard()
 	print("Done uncovering", OS.get_unix_time()-timeStart)
 	timeStart = OS.get_unix_time()
 	
