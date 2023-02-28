@@ -9,7 +9,7 @@ var grid
 # 1 open
 # 2 flagged
 # TODO: enum?
-func uncover():
+func uncover(depth = 0):
 	$TileUnopened.visible = false
 	if isMine:
 		$TileMine.visible = true
@@ -19,7 +19,7 @@ func uncover():
 		
 	if status == 0 and $Proximity.text == "":
 		status = 1
-		grid.uncover(r,c)
+		grid.uncover(r,c, depth)
 
 func _on_Control_gui_input(event):
 	if event is InputEventMouseButton:

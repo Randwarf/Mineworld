@@ -1,25 +1,58 @@
 extends Node2D
 
-var rowCount = 15
-var collumnCount = 15
-var bombCount = 15
+var rowCount = 150
+var collumnCount = 150
+var bombCount = 2500
 var grid = []
 var Tile = preload("res://Tile.tscn")
 var Player = preload("res://Player.tscn")
+var PlayerR = rowCount/2
+var PlayerC = collumnCount/2
 
 # Called when the node enters the scene tree for the first time.
+func _init():
+	var timeStart = OS.get_unix_time()
+	print("creating NOTHING")
+	OS.delay_msec(2000)
+	print("Done creating NOTHING", OS.get_unix_time()-timeStart)
+	
 func _ready():
+	var timeStart = OS.get_unix_time()
+	print("creating grid")
 	createGrid()
+	print("Done creating grid", OS.get_unix_time()-timeStart)
+	timeStart = OS.get_unix_time()
+	print("setting bombs")
 	setBombs()
+	print("Done setting bombs", OS.get_unix_time()-timeStart)
+	timeStart = OS.get_unix_time()
+	print("clearing bombs")
+	for r in range(PlayerR-2, PlayerR+3):
+		for c in range(PlayerC-2, PlayerC+3):
+			grid[r][c].isMine = false
+	print("Done clearing bombs", OS.get_unix_time()-timeStart)
+	timeStart = OS.get_unix_time()
+	print("counting prox")
 	countProximities()
+	print("Done counting prox", OS.get_unix_time()-timeStart)
+	timeStart = OS.get_unix_time()
+	print("spawn player")
 	spawnPlayer()
+	print("Done spawning player", OS.get_unix_time()-timeStart)
+	timeStart = OS.get_unix_time()
+	print("initial uncover")
+	uncover(PlayerR, PlayerC)
+	print("Done uncovering", OS.get_unix_time()-timeStart)
+	timeStart = OS.get_unix_time()
+	
 
 func spawnPlayer():
 	Player = preload("res://Player.tscn")
 	Player = Player.instance()
-	Player.position = Vector2(7,7) * 16
+	Player.position = Vector2(PlayerR, PlayerC) * 16
 	Player.grid = self
 	add_child(Player)
+	
 
 func createGrid():
 	for r in rowCount:
@@ -34,10 +67,12 @@ func createGrid():
 			grid[r].append(tile)
 			
 func setBombs():
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
 	var bombs = 0
 	while bombs < bombCount:
-		var r = randi()%rowCount
-		var c = randi()%collumnCount
+		var r = rng.randi()%rowCount
+		var c = rng.randi()%collumnCount
 		if !grid[r][c].isMine:
 			grid[r][c].isMine = true
 			bombs+=1
@@ -59,11 +94,14 @@ func countProximity(row, collumn):
 					count += 1
 	return count
 	
-func uncover(row, collumn):
+#Reikia queue
+func uncover(row, collumn, depth = 0):
+	if depth > 200:
+		return
 	for r in range(row-1, row+2):
 		for c in range(collumn-1, collumn+2):
 			if(r >= 0 and r < rowCount and c >= 0 and c < collumnCount):
-				grid[r][c].uncover()
+				grid[r][c].uncover(depth+1)
 				
 func updateBoard():
 	var r = Player.position.y/16
