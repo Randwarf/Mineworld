@@ -107,6 +107,9 @@ func updateBoard():
 	var r = Player.position.y/16
 	var c = Player.position.x/16
 	grid[r][c].uncover()
+	
+func isMine(r, c):
+	return grid[r][c].isMine
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
