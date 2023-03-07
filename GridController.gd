@@ -18,10 +18,12 @@ var proxColors = 	{1: Color(0,116.0/255,1),
 					 8: Color(0.3,0.3,0.3),
 					 9: Color(1,1,1),
 					 0: Color(1,1,1)}
+var camera
 
 # Called when the node enters the scene tree for the first time.	
 func _ready():
-	pass
+	camera = get_node("PlayerCamera")
+	camera.position = Player.position
 	
 func generate(rC, cC, bC):
 	rowCount = rC
@@ -102,12 +104,13 @@ func uncover(row, collumn, depth = 0):
 				grid[r][c].uncover(depth+1)
 				
 func updateBoard():
-	var r = Player.position.y/16
-	var c = Player.position.x/16
+	var r = Player.truePos.y/16
+	var c = Player.truePos.x/16
 	grid[r][c].uncover()
 	
 func isMine(r, c):
 	return grid[r][c].isMine
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	camera.position = camera.position.linear_interpolate(Player.truePos, delta*Player.movementSpeed*0.5)
+	
