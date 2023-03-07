@@ -1,44 +1,46 @@
 extends Node2D
 
-var rowCount = 150
-var collumnCount = 150
-var bombCount = 2500
+var rowCount
+var collumnCount
+var bombCount
 var grid = []
 var Tile = preload("res://Tile.tscn")
 var Player = preload("res://Player.tscn")
-var PlayerR = rowCount/2
-var PlayerC = collumnCount/2
+var PlayerR
+var PlayerC
+var proxColors = 	{1: Color(0,116.0/255,1),
+					 2: Color.darkgreen,
+					 3: Color(1,0,0),
+					 4: Color(0,0,255.0/139),
+					 5: Color(126.0/255, 13/255.0, 45/255.0),
+					 6: Color(0,135/255.0,1),
+					 7: Color(0,0,0),
+					 8: Color(0.3,0.3,0.3),
+					 9: Color(1,1,1),
+					 0: Color(1,1,1)}
 
 # Called when the node enters the scene tree for the first time.	
 func _ready():
-	var timeStart = OS.get_unix_time()
-	print("creating grid")
+	pass
+	
+func generate(rC, cC, bC):
+	rowCount = rC
+	collumnCount = cC
+	bombCount = bC
+	PlayerR = rowCount/2
+	PlayerC = collumnCount/2
+	
 	createGrid()
-	print("Done creating grid", OS.get_unix_time()-timeStart)
-	timeStart = OS.get_unix_time()
-	print("setting bombs")
 	setBombs()
-	print("Done setting bombs", OS.get_unix_time()-timeStart)
-	timeStart = OS.get_unix_time()
-	print("clearing bombs")
+	clearStartingArea()
+	countProximities()
+	spawnPlayer()
+	updateBoard()
+	
+func clearStartingArea():
 	for r in range(PlayerR-2, PlayerR+3):
 		for c in range(PlayerC-2, PlayerC+3):
 			grid[r][c].isMine = false
-	print("Done clearing bombs", OS.get_unix_time()-timeStart)
-	timeStart = OS.get_unix_time()
-	print("counting prox")
-	countProximities()
-	print("Done counting prox", OS.get_unix_time()-timeStart)
-	timeStart = OS.get_unix_time()
-	print("spawn player")
-	spawnPlayer()
-	print("Done spawning player", OS.get_unix_time()-timeStart)
-	timeStart = OS.get_unix_time()
-	print("initial uncover")
-	updateBoard()
-	print("Done uncovering", OS.get_unix_time()-timeStart)
-	timeStart = OS.get_unix_time()
-	
 
 func spawnPlayer():
 	Player = preload("res://Player.tscn")
@@ -75,9 +77,11 @@ func countProximities():
 	for r in rowCount:
 		for c in collumnCount:
 			var proxCount = countProximity(r,c)
-			grid[r][c].get_node("Proximity").text = str(proxCount)
+			var label = grid[r][c].get_node("Proximity")
+			label.text = str(proxCount)
+			label.modulate = proxColors[proxCount]
 			if proxCount == 0:
-				grid[r][c].get_node("Proximity").text = ""
+				label.text = ""
 
 func countProximity(row, collumn):
 	var count = 0

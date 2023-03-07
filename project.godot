@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="Minesweeper"
-run/main_scene="res://GridScene.tscn"
+run/main_scene="res://Level select.tscn"
 config/icon="res://icon.png"
 
 [gui]
