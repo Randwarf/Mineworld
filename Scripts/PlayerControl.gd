@@ -38,9 +38,12 @@ func _input(event):
 		animatedSprite.animation = "walk_right"		
 	grid.updateBoard()
 	if grid.isMine(truePos.y/16, truePos.x/16) == true:
-		var gameOver = get_node("GameOver")
-		gameOver.visible = true
-		isDead = true
+		die()
+		
+func die():
+	var gameOver = get_node("GameOver")
+	gameOver.activate()
+	isDead = true
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	position = position.linear_interpolate(truePos, delta*movementSpeed)

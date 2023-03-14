@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Level select.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/Level select.gd" type="Script" id=2]
 
 [node name="Level select" type="Node2D"]
 position = Vector2( 449, 222 )

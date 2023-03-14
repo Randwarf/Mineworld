@@ -6,6 +6,7 @@ var bombCount
 var grid = []
 var Tile = preload("res://Tile.tscn")
 var Player = preload("res://Player.tscn")
+var Boss = preload("res://Boss_WOF.tscn")
 var PlayerR
 var PlayerC
 var proxColors = 	{1: Color(0,116.0/255,1),
@@ -37,7 +38,14 @@ func generate(rC, cC, bC):
 	clearStartingArea()
 	countProximities()
 	spawnPlayer()
+	spawnBoss()
 	updateBoard()
+
+func spawnBoss():
+	Boss = Boss.instance()
+	add_child(Boss)
+	Boss.position = Vector2(0,0)
+	Boss.setTarget(Player)
 	
 func clearStartingArea():
 	for r in range(PlayerR-2, PlayerR+3):

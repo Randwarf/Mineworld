@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Default_Font.tres" type="Theme" id=1]
+[ext_resource path="res://GameOver.gd" type="Script" id=2]
 
 [node name="Node2D" type="Node2D"]
 visible = false
+script = ExtResource( 2 )
 
 [node name="Label" type="Label" parent="."]
 modulate = Color( 1, 0, 0, 1 )
@@ -17,3 +19,8 @@ margin_right = 45.5
 margin_bottom = 8.5
 theme = ExtResource( 1 )
 text = "GAME OVER"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+color = Color( 0, 0, 0, 0 )
