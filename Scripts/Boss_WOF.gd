@@ -17,7 +17,7 @@ func setTarget(toTarget):
 func _process(delta):
 	position.y = target.position.y
 	var distance = target.position.x-position.x
-	var speed = pow(distance/32, 2) + 5
+	var speed = pow(distance/128, 4) + 5
 	position.x += speed*delta
 	
 	if position.x > target.position.x:

@@ -7,6 +7,7 @@ var grid = []
 var Tile = preload("res://Tile.tscn")
 var Player = preload("res://Player.tscn")
 var Boss = preload("res://Boss_WOF.tscn")
+var Goal = preload("res://Goal.tscn")
 var PlayerR
 var PlayerC
 var proxColors = 	{1: Color(0,116.0/255,1),
@@ -23,7 +24,7 @@ var camera
 
 # Called when the node enters the scene tree for the first time.	
 func _ready():
-	generate(50,50,200)	
+	generate(50,50,350)	
 	camera = get_node("PlayerCamera")
 	camera.position = Player.position
 	
@@ -48,15 +49,25 @@ func spawnBoss():
 	Boss.position = Vector2(0,0)
 	Boss.setTarget(Player)
 	
+	var r = rowCount/2
+	var c = collumnCount-3
+	Goal = Goal.instantiate()
+	add_child(Goal)
+	Goal.position = Vector2(c, r) *16
+	clearArea(r,c,1)
+	
+func clearArea(Rpos,Cpos, radius):
+	for r in range(Rpos-radius, Rpos+radius+1):
+		for c in range(Cpos-radius, Rpos+radius+1):
+			grid[r][c].isMine = false	
+
 func clearStartingArea():
-	for r in range(PlayerR-2, PlayerR+3):
-		for c in range(PlayerC-2, PlayerC+3):
-			grid[r][c].isMine = false
+	clearArea(PlayerR, PlayerC, 2)
 
 func spawnPlayer():
 	Player = preload("res://Player.tscn")
 	Player = Player.instantiate()
-	Player.position = Vector2(PlayerR, PlayerC) * 16
+	Player.position = Vector2(PlayerC, PlayerR) * 16
 	Player.grid = self
 	add_child(Player)
 	
@@ -122,4 +133,11 @@ func isMine(r, c):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	camera.position = camera.position.lerp(Player.truePos, delta*Player.movementSpeed*0.5)
-	
+
+func isWin():
+	var r = rowCount/2
+	var c = collumnCount-3
+	print(Player.truePos.y/16, " ", Player.truePos.x/16,";",r," ",c)
+	if (Player.truePos.y/16 == r and Player.truePos.x/16 == c):
+		return true
+	return false

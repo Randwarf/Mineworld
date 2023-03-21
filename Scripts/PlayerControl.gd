@@ -39,7 +39,13 @@ func _input(event):
 	grid.updateBoard()
 	if grid.isMine(truePos.y/16, truePos.x/16) == true:
 		die()
-		
+	if grid.isWin() == true:
+		print("true")
+		win()
+
+func win():
+	print("Winner winner chicken dinner")
+
 func die():
 	var gameOver = get_node("GameOver")
 	gameOver.activate()
