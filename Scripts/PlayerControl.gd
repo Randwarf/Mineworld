@@ -8,9 +8,9 @@ var isMoving = false
 var truePos = Vector2(position.x, position.y)
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	animatedSprite = get_node("AnimatedSprite")
+	animatedSprite = get_node("AnimatedSprite2D")
 	animatedSprite.animation = "idle"
-	animatedSprite.playing = true
+	animatedSprite.play()
 	truePos = Vector2(position.x, position.y)
 	
 func _input(event):
@@ -46,7 +46,7 @@ func die():
 	isDead = true
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	position = position.linear_interpolate(truePos, delta*movementSpeed)
+	position = position.lerp(truePos, delta*movementSpeed)
 	if (position-truePos).length() < 0.1:
 		isMoving = false
 		animatedSprite.animation = "idle"

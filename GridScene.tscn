@@ -1,10 +1,9 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://cr28knk8dshpd"]
 
-[ext_resource path="res://Scripts/GridController.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://Scripts/GridController.gd" id="2"]
 
 [node name="GridScene" type="Node2D"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="PlayerCamera" type="Camera2D" parent="."]
-current = true
-zoom = Vector2( 0.3, 0.3 )
+zoom = Vector2(4, 4)

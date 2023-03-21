@@ -23,9 +23,9 @@ func uncover(depth = 0):
 
 func _on_Control_gui_input(event):
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and event.pressed and status == 0:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and status == 0:
 			uncover()
 		
-		elif event.button_index == BUTTON_RIGHT and event.pressed and status == 0:
+		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and status == 0:
 			status = 2
 			$TileFlag.visible = true

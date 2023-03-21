@@ -10,19 +10,20 @@ var Boss = preload("res://Boss_WOF.tscn")
 var PlayerR
 var PlayerC
 var proxColors = 	{1: Color(0,116.0/255,1),
-					 2: Color.darkgreen,
-					 3: Color(1,0,0),
-					 4: Color(0,0,255.0/139),
-					 5: Color(126.0/255, 13/255.0, 45/255.0),
-					 6: Color(0,135/255.0,1),
-					 7: Color(0,0,0),
-					 8: Color(0.3,0.3,0.3),
-					 9: Color(1,1,1),
-					 0: Color(1,1,1)}
+2: Color.DARK_GREEN,
+3: Color(1,0,0),
+4: Color(0,0,255.0/139),
+5: Color(126.0/255, 13/255.0, 45/255.0),
+6: Color(0,135/255.0,1),
+7: Color(0,0,0),
+8: Color(0.3,0.3,0.3),
+9: Color(1,1,1),
+0: Color(1,1,1)}
 var camera
 
 # Called when the node enters the scene tree for the first time.	
 func _ready():
+	generate(50,50,200)	
 	camera = get_node("PlayerCamera")
 	camera.position = Player.position
 	
@@ -42,7 +43,7 @@ func generate(rC, cC, bC):
 	updateBoard()
 
 func spawnBoss():
-	Boss = Boss.instance()
+	Boss = Boss.instantiate()
 	add_child(Boss)
 	Boss.position = Vector2(0,0)
 	Boss.setTarget(Player)
@@ -54,7 +55,7 @@ func clearStartingArea():
 
 func spawnPlayer():
 	Player = preload("res://Player.tscn")
-	Player = Player.instance()
+	Player = Player.instantiate()
 	Player.position = Vector2(PlayerR, PlayerC) * 16
 	Player.grid = self
 	add_child(Player)
@@ -64,7 +65,7 @@ func createGrid():
 	for r in rowCount:
 		grid.append([])
 		for c in collumnCount:
-			var tile = Tile.instance()
+			var tile = Tile.instantiate()
 			tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
 			tile.r = r
 			tile.c = c
@@ -120,5 +121,5 @@ func isMine(r, c):
 	return grid[r][c].isMine
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	camera.position = camera.position.linear_interpolate(Player.truePos, delta*Player.movementSpeed*0.5)
+	camera.position = camera.position.lerp(Player.truePos, delta*Player.movementSpeed*0.5)
 	

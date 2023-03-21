@@ -17,8 +17,9 @@ func _ready():
 
 func generate(r,c,b):
 	var grid = preload("res://GridScene.tscn")
-	grid = grid.instance()
-	grid.generate(r,c,b)
+	grid = grid.instantiate()
+	#grid.generate(r,c,b)
+	
 	add_child(grid)
 	get_node("Control").visible=false
 	get_node("Control2").visible=false
@@ -27,16 +28,16 @@ func generate(r,c,b):
 
 func _on_Control_gui_input(event):
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			generate(20,20,50)
 			
 func _on_Control2_gui_input(event):
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			generate(50,50,200)
 
 
 func _on_Control3_gui_input(event):
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			generate(50,50,500)
