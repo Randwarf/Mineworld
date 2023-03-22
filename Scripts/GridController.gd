@@ -3,7 +3,7 @@ extends Node2D
 var rowCount
 var collumnCount
 var bombCount
-var map = [] #[][] grid of values with an array inside [isMine, biomeIndex]
+var map = [] #[][] grid of values with an array inside [isMine, biomeIndex]. Currently just the isMine part, so, no triple array
 var grid = []
 var Tile = preload("res://Tile.tscn")
 var Player = preload("res://Player.tscn")
@@ -11,7 +11,7 @@ var Boss = preload("res://Boss_WOF.tscn")
 var Goal = preload("res://Goal.tscn")
 var PlayerR
 var PlayerC
-var globalLoadRange = 7
+var globalLoadRange = 12
 var proxColors = 	{1: Color(0,116.0/255,1),
 2: Color.DARK_GREEN,
 3: Color(1,0,0),
@@ -38,10 +38,11 @@ func generate(rC, cC, bC):
 	PlayerC = collumnCount/2
 	
 	createMapWithBombs()
+	clearStartingArea()
 	initializeSurroundings(PlayerR, PlayerC, globalLoadRange, 2)
 	#createGrid()
 	#setBombs()
-	clearStartingArea()
+	
 	spawnPlayer()
 	countLocalProximities(globalLoadRange)
 	#countProximities()
@@ -58,7 +59,7 @@ func createMapWithBombs():
 		map.append([])
 		grid.append([])
 		for c in collumnCount:
-			if rng.randf_range(0, 1) < 0.3:
+			if rng.randf_range(0, 1) < 0.2:
 				map[r].append(1)
 			else:
 				map[r].append(0)
@@ -71,7 +72,7 @@ func createMapWithBombs():
 func initializeSurroundings(Rpos, Cpos, loadRange, killBorderWidth):
 	for r in range(Rpos - loadRange - killBorderWidth, Rpos + loadRange + killBorderWidth + 1):
 		for c in range(Cpos - loadRange - killBorderWidth, Cpos + loadRange + killBorderWidth + 1):
-			if (r >= 0 and r <= rowCount and c >= 0 and c <= collumnCount):
+			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
 				if grid[r][c] == null:
 					if r < Rpos - loadRange or r > Rpos + loadRange or c < Cpos - loadRange or c > Cpos + loadRange:
 						#find the tile in this coordinate and destroy it
@@ -87,36 +88,48 @@ func initializeSurroundings(Rpos, Cpos, loadRange, killBorderWidth):
 						grid[r][c] = tile
 						if map[r][c] == 1:
 							grid[r][c].isMine = true
-							
-						if r == Rpos - loadRange or r == Rpos + loadRange or c == Cpos - loadRange or c == Cpos + loadRange:
-							grid[r][c].uncover()
+				else:
+					if (r <= Rpos - loadRange + 3 and r >= Rpos - loadRange) or (r >= Rpos + loadRange - 3 and r <= Rpos + loadRange) or (c <= Cpos - loadRange and c >= Cpos - loadRange - 1) or (c >= Cpos + loadRange and c <= Cpos + loadRange + 1):
+						if findUnlockedZeroTiles(r, c) == true:
+							grid[r][c].uncover(5)
+								
 						
 
 func findUnlockedZeroTiles(row, collumn):
 	for r in range(row-1, row+2):
 		for c in range(collumn-1, collumn+2):
-			if (r >= 0 and r <= rowCount and c >= 0 and c <= collumnCount):
-				if countProximity(r,c) == 0 and grid[r][c].status == 1:
-					return true
+			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
+				if grid[r][c] != null:
+					#if countProximity(r,c) == 0 and grid[r][c].status == 1:
+					if grid[r][c].status == 1:
+						return true
 			else:
 				return false #This is kinda bad, defaults to not uncovering at the edge of the grid
 
 func countLocalProximities(loadRange):
 	var pr = Player.truePos.y/16
 	var pc = Player.truePos.x/16
+
 	for r in range(pr - loadRange + 2, pr + loadRange - 2 + 1):
 		for c in range(pc - loadRange + 2, pc + loadRange - 2 + 1):
-			if (r >= 0 and r <= rowCount and c >= 0 and c <= collumnCount):
-				if findUnlockedZeroTiles(r, c) == true:
-					var proxCount = countProximity(r,c)
-					var label = grid[r][c].get_node("Proximity")
-					label.text = str(proxCount)
-					label.modulate = proxColors[proxCount]
-					if proxCount == 0:
-						label.text = ""
-				else:
-					#load hidden tiles
-					pass
+			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
+				var proxCount = countProximity(r,c)
+				var label = grid[r][c].get_node("Proximity")
+				label.text = str(proxCount)
+				label.modulate = proxColors[proxCount]
+				if proxCount == 0:
+					label.text = ""
+#			if (r >= 0 and r <= rowCount and c >= 0 and c <= collumnCount):
+#				if findUnlockedZeroTiles(r, c) == true:
+#					var proxCount = countProximity(r,c)
+#					var label = grid[r][c].get_node("Proximity")
+#					label.text = str(proxCount)
+#					label.modulate = proxColors[proxCount]
+#					if proxCount == 0:
+#						label.text = ""
+#				else:
+#					#load hidden tiles
+#					pass
 
 
 
@@ -136,7 +149,7 @@ func spawnBoss():
 func clearArea(Rpos,Cpos, radius):
 	for r in range(Rpos-radius, Rpos+radius+1):
 		for c in range(Cpos-radius, Rpos+radius+1):
-			grid[r][c].isMine = false	
+			map[r][c] = 0	#Now changes the map instead of the grid
 
 func clearStartingArea():
 	clearArea(PlayerR, PlayerC, 2)
@@ -187,13 +200,14 @@ func countProximity(row, collumn):
 	for r in range(row-1, row+2):
 		for c in range(collumn-1, collumn+2):
 			if(r >= 0 and r < rowCount and c >= 0 and c < collumnCount):
-				if(grid[r][c].isMine):
+				if(map[r][c] == 1): #Now uses the map for checking
 					count += 1
+					
 	return count
 	
 #Reikia queue
 func uncover(row, collumn, depth = 0):
-	if depth > 200:
+	if depth > 100:
 		return
 	for r in range(row-1, row+2):
 		for c in range(collumn-1, collumn+2):
@@ -214,6 +228,7 @@ func _process(delta):
 	camera.position = camera.position.lerp(Player.truePos, delta*Player.movementSpeed*0.5)
 
 func isWin():
+	
 	var r = rowCount/2
 	var c = collumnCount-3
 	if (Player.truePos.y/16 == r and Player.truePos.x/16 == c):

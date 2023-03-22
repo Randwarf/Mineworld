@@ -6,7 +6,7 @@ var r
 var c
 var grid
 # 0 closed
-# 1 open
+# 1 open | actually no, this is only true when "$Proximity.text == """" meaning it's 1 when a tile has no neighbors
 # 2 flagged
 # TODO: enum?
 func uncover(depth = 0):

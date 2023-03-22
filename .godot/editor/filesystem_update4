@@ -7,4 +7,5 @@ res://Tile.tscn
 res://Boss_WOF.tscn
 res://Goal.tscn
 res://Scripts/GridController.gd
+res://Scripts/Tile.gd
 res://Scripts/PlayerControl.gd
