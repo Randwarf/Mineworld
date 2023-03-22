@@ -13,7 +13,7 @@ func _ready():
 	animatedSprite.play()
 	truePos = Vector2(position.x, position.y)
 	
-func _input(event):
+func _input(event): #fyi this triggers on every mouse movement, sooooooooo
 	if isDead:
 		return
 	if isMoving:
