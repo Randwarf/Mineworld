@@ -2,6 +2,7 @@ extends Node2D
 
 var rowCount
 var collumnCount
+var bombPercentage
 var bombCount
 var map = [] #[][] grid of values with an array inside [isMine, biomeIndex]. Currently just the isMine part, so, no triple array
 var grid = []
@@ -11,7 +12,9 @@ var Boss = preload("res://Boss_WOF.tscn")
 var Goal = preload("res://Goal.tscn")
 var PlayerR
 var PlayerC
-var globalLoadRange = 12
+var size = 129 #change this to instead use iteration size maybe
+var globalLoadRange = 10
+var globalKillBorderWidth = 2
 var proxColors = 	{1: Color(0,116.0/255,1),
 2: Color.DARK_GREEN,
 3: Color(1,0,0),
@@ -26,27 +29,30 @@ var camera
 
 # Called when the node enters the scene tree for the first time.	
 func _ready():
-	generate(100,100,500)	
+	generate(size,size,0.15)	
 	camera = get_node("PlayerCamera")
 	camera.position = Player.position
 	
-func generate(rC, cC, bC):
+func generate(rC, cC, bP):
 	rowCount = rC
 	collumnCount = cC
-	bombCount = bC
+	bombPercentage = bP
 	PlayerR = rowCount/2
 	PlayerC = collumnCount/2
 	
 	createMapWithBombs()
+	
+	initialBiomeGeneration()
+	
 	clearStartingArea()
-	initializeSurroundings(PlayerR, PlayerC, globalLoadRange, 2)
-	#createGrid()
-	#setBombs()
+	initializeSurroundings(PlayerR, PlayerC)
+	
 	
 	spawnPlayer()
 	countLocalProximities(globalLoadRange)
 	#countProximities()
-	
+	#createGrid()
+	#setBombs()
 	#spawnBoss()
 	updateBoard()
 
@@ -59,7 +65,7 @@ func createMapWithBombs():
 		map.append([])
 		grid.append([])
 		for c in collumnCount:
-			if rng.randf_range(0, 1) < 0.2:
+			if rng.randf_range(0, 1) < bombPercentage:
 				map[r].append(1)
 			else:
 				map[r].append(0)
@@ -69,29 +75,42 @@ func createMapWithBombs():
 # This should be changed to instead initialize only the new tiles for better performace
 # It currently looks through all surrounding tiles
 # Or a different method could be used
-func initializeSurroundings(Rpos, Cpos, loadRange, killBorderWidth):
-	for r in range(Rpos - loadRange - killBorderWidth, Rpos + loadRange + killBorderWidth + 1):
-		for c in range(Cpos - loadRange - killBorderWidth, Cpos + loadRange + killBorderWidth + 1):
+func initializeSurroundings(Rpos, Cpos):
+	for r in range(Rpos - globalLoadRange - globalKillBorderWidth, Rpos + globalLoadRange + globalKillBorderWidth + 1):
+		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
 			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
 				if grid[r][c] == null:
-					if r < Rpos - loadRange or r > Rpos + loadRange or c < Cpos - loadRange or c > Cpos + loadRange:
-						#find the tile in this coordinate and destroy it
-						pass
-					else:
-						#create the tile in this coordinate
-						var tile = Tile.instantiate()
-						tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
-						tile.r = r
-						tile.c = c
-						tile.grid = self
-						add_child(tile)
-						grid[r][c] = tile
-						if map[r][c] == 1:
-							grid[r][c].isMine = true
+					#create the tile in this coordinate
+					var tile = Tile.instantiate()
+					tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
+					tile.r = r
+					tile.c = c
+					tile.grid = self
+					add_child(tile)
+					grid[r][c] = tile
+					if map[r][c] == 1:
+						grid[r][c].isMine = true
+						grid[r][c].updateColor(1)
+							
+#						if (r <= Rpos - globalLoadRange + 1 and r >= Rpos - globalLoadRange) or (r >= Rpos + globalLoadRange - 1 and r <= Rpos + globalLoadRange) or (c <= Cpos - globalLoadRange and c >= Cpos - globalLoadRange - 1) or (c >= Cpos + globalLoadRange and c <= Cpos + globalLoadRange + 1):
+#							if findUnlockedZeroTiles(r, c) == true:
+#								grid[r][c].uncover()
 				else:
-					if (r <= Rpos - loadRange + 3 and r >= Rpos - loadRange) or (r >= Rpos + loadRange - 3 and r <= Rpos + loadRange) or (c <= Cpos - loadRange and c >= Cpos - loadRange - 1) or (c >= Cpos + loadRange and c <= Cpos + loadRange + 1):
-						if findUnlockedZeroTiles(r, c) == true:
-							grid[r][c].uncover(5)
+					if r < Rpos - globalLoadRange or r > Rpos + globalLoadRange or c < Cpos - globalLoadRange or c > Cpos + globalLoadRange:
+#						var raycast = RayCast2D.new()
+#						add_child(raycast)
+#						raycast.global_position = Vector2(c*16, r*16)
+#						raycast.cast_to = Vector2(0, -1000)
+#						if raycast.is_colliding():
+#							var object_instance = raycast.get_collider()
+#							print("caught")
+#						else:
+#							print("missed")
+						pass
+						#find the tile in this coordinate and destroy it
+						
+					elif findUnlockedZeroTiles(r, c) == true: #very innefficient to check every single tile, however, I could not figure out how to just check the edge
+						grid[r][c].uncover()
 								
 						
 
@@ -130,6 +149,105 @@ func countLocalProximities(loadRange):
 #				else:
 #					#load hidden tiles
 #					pass
+
+
+#Onto biome generation
+func initialBiomeGeneration():
+	var n = 5
+	#var initialMap = define2DArray(n, 0)
+	var finalsize = size #redudant
+	var initialMap = ApplyBiomeValues(n)
+	var shadowMap = initialMap
+	var iterations = floor(log(finalsize)/log(2) - 3)
+	iterations = 5 #shhh
+	
+	print(initialMap)
+	
+	for k in iterations:
+		initialMap = zoom(shadowMap, n)
+		n = (2*n)-1
+		shadowMap = initialMap
+	
+	for k in 5:
+		initialMap = smooth(initialMap, n)
+		n = n - 2
+		shadowMap = initialMap
+	
+	print(n)
+	# OVERWRITES MAP FOR TESTING PURPOSES, DELETE LATER
+	for i in n:
+		for j in n:
+			map[i][j] = initialMap[i][j]
+	#print(initialMap)
+	
+func define2DArray(size, value):
+	var arr = []
+	for i in size:
+		arr.append([])
+		for j in size:
+			arr[i].append(value)
+	return arr
+
+func ApplyBiomeValues(size): #Currently very very simple, can be expanded upon a lot
+	size = size + 1
+	var bitmap = define2DArray(size, 0)
+	for i in size:
+		for j in size:
+			if (randi_range(0, 2) < 1):
+				bitmap[i][j] = 0 
+			else:
+				bitmap[i][j] = 1
+	return bitmap
+
+func zoom(input, n):
+	var newN = (2 * n) - 1
+	var output = define2DArray(newN, 0)
+	for i in n:
+		for j in n:
+			output[i*2][j*2] = input[i][j]
+			#output.set(i * 2, j * 2, input[i * n + j])
+	for i in range(newN):
+		if i % 2 == 0:
+			for j in range(1, newN - 1, 2):
+				output[i][j] = pickOneRand(output[i][j - 1], output[i][j], 0, 0, 2)
+				#output.set(i, j, pickOneRand(output.get(i, j - 1), output.get(i, j + 1), 0, 0, 2))
+		else:
+			for j in range(0, newN, 2):
+				output[i][j] = pickOneRand(output[i + 1][j], output[i - 1][j], 0, 0, 2)
+				#output.set(i, j, pickOneRand(output.get(i + 1, j), output.get(i - 1, j), 0, 0, 2))
+			for j in range(1, newN - 1, 2):
+				if output[i][j - 1] != 0 and output[i][j + 1] != 0 and output[i - 1][j] != 0 and output[i + 1][j] == 0:
+					output[i][j] = output[i - 1][j]
+					#output.set(i + 1, j, output.get(i - 1, j))
+				output[i][j] = pickOneRand(output[i][j - 1], output[i][j + 1], output[i + 1][j], output[i - 1][j], 4)
+	return output
+
+func smooth(input, n):
+	var output = define2DArray(n-2, 0)
+	for i in n-2:
+		for j in n-2:
+			output[i][j] = input[i + 1][j + 1]
+	for i in n-1:
+		for j in n-1:
+			if input[i + 1][j] == input[i - 1][j] and input[i][j + 1] == input[i][j - 1]:
+				output[i - 1][j - 1] = pickOneRand(input[i + 1][j], input[i][j + 1], 0, 0, 2)
+			elif input[i + 1][j] == input[i - 1][j]:
+				output[i - 1][j - 1] = input[i + 1][j]
+			elif input[i][j + 1] == input[i][j - 1]:
+				output[i - 1][j - 1] = input[i][j + 1]
+	return output;
+
+func pickOneRand(a, b, c, d, amount):
+	var list = []
+	list.append(a)
+	list.append(b)
+	list.append(c)
+	list.append(d)
+	return list[randi_range(0, amount-1)]
+	pass
+
+
+
 
 
 
@@ -218,7 +336,7 @@ func updateBoard():
 	var r = Player.truePos.y/16
 	var c = Player.truePos.x/16
 	grid[r][c].uncover()
-	initializeSurroundings(r, c, globalLoadRange, 2) #----------------------------------------------------------
+	initializeSurroundings(r, c) #----------------------------------------------------------
 	countLocalProximities(globalLoadRange)
 	
 func isMine(r, c):

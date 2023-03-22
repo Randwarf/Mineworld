@@ -18,6 +18,7 @@ func _input(event): #fyi this triggers on every mouse movement, sooooooooo
 	if isDead:
 		return
 	if isMoving:
+		grid.initializeSurroundings(truePos.y/16, truePos.x/16)
 		#queue up a move
 		#return
 		pass
