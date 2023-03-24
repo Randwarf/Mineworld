@@ -11,8 +11,8 @@ var grid
 # TODO: enum?
 func updateColor(biomeIndex): #Code to change the color based on biome index, not finished
 	if biomeIndex == 1:
-		$TileOpened.modulate = Color(0,0,1)
-		$TileUnopened.modulate = Color(0,0,1)
+		$TileOpened.modulate = Color(0.5,0,0)
+		$TileUnopened.modulate = Color(0.5,0,0)
 
 func uncover(depth = 0):
 	$TileUnopened.visible = false
