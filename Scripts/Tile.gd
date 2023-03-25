@@ -13,6 +13,9 @@ func updateColor(biomeIndex): #Code to change the color based on biome index, no
 	if biomeIndex == 1:
 		$TileOpened.modulate = Color(0.5,0,0)
 		$TileUnopened.modulate = Color(0.5,0,0)
+	if biomeIndex == 2:
+		$TileOpened.modulate = Color(0,0,0.5)
+		$TileUnopened.modulate = Color(0,0,0.5)
 
 func uncover(depth = 0):
 	$TileUnopened.visible = false
@@ -25,6 +28,7 @@ func uncover(depth = 0):
 	if status == 0 and $Proximity.text == "":
 		status = 1
 		grid.uncover(r,c, depth)
+
 
 func _on_Control_gui_input(event):
 	if event is InputEventMouseButton:

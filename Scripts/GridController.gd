@@ -13,7 +13,7 @@ var Goal = preload("res://Goal.tscn")
 var PlayerR
 var PlayerC
 var mapStartingSize = 3
-var mapScalingIndex = 8
+var mapScalingIndex = 5
 var mapSmoothingIndex = 3
 var size #change this to instead use iteration size maybe
 var globalLoadRange = 15
@@ -32,8 +32,27 @@ var proxColors = 	{1: Color(0,116.0/255,1),
 0: Color(1,1,1)}
 var camera
 
+# MAKE THIS INTO SOME SORT OF A CLASS WHICH YOU CAN REFERENCE
+class biomeClass:
+	var mineChance
+	var color
+	
+#Should store all the data for a biome
+#Currently that is mine spawnrate and coloring of the tiles
+var biomeDatas = [ 
+	[0.05, Color(0,0,0)],
+	[0.2, Color(0.5,0,0)],
+	[0.4, Color(0,0.5,0)]
+]
+var biomeCount #How many biomes are enabled, latter ones are excluded
+
+func initializeBiomeData():
+	var biomeData = []
+
 # Called when the node enters the scene tree for the first time.	
 func _ready():
+	
+	
 	size = mapStartingSize
 	for i in mapScalingIndex:
 		size = (2*size)-1
@@ -50,23 +69,14 @@ func generate(rC, cC, bP):
 	PlayerC = collumnCount/2
 	
 	grid = define2DArray(size, null)
-	
 	initialBiomeGeneration()
 	createMapWithBombs()
-	
-	
-	
 	clearStartingArea()
 	actuallyInitializeSurroundings(PlayerR, PlayerC)
-	
-	
 	spawnPlayer()
 	countLocalProximities(globalLoadRange)
-	#countProximities()
-	#createGrid()
-	#setBombs()
-	#spawnBoss()
 	updateBoard()
+	#spawnBoss()
 
 # Creates a map of integers that hold basic data for tile information
 # Will be expanded on when biomes are added
@@ -74,10 +84,12 @@ func createMapWithBombs():
 	rng.randomize()
 	for r in rowCount:
 		for c in collumnCount:
-			if (map[r][c][1] == 1):
-				map[r][c][0] = addMine(0.2)
 			if (map[r][c][1] == 0):
 				map[r][c][0] = addMine(0.05)
+			elif (map[r][c][1] == 1):
+				map[r][c][0] = addMine(0.2)
+			elif (map[r][c][1] == 2):
+				map[r][c][0] = addMine(0.4)
 
 func addMine(chance):
 	if rng.randf_range(0, 1) < chance:
@@ -86,39 +98,17 @@ func addMine(chance):
 		return 0
 
 
-
-#	for r in rowCount:
-#		map.append([])
-#		grid.append([])
-#		for c in collumnCount:
-#			if rng.randf_range(0, 1) < bombPercentage:
-#				map[r].append(1)
-#			else:
-#				map[r].append(0)
-#			grid[r].append(null)
-
 # Creates tiles for the surrounding area of the player and destroys them outside it
 # This should be changed to instead initialize only the new tiles for better performace
 # It currently looks through all surrounding tiles
 # Or a different method could be used
-func initializeSurroundings(Rpos, Cpos):
+func updateSurroundings(Rpos, Cpos):
 	for r in range(Rpos - globalLoadRange - globalKillBorderWidth, Rpos + globalLoadRange + globalKillBorderWidth + 1):
 		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
 			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
 				if r < Rpos - globalLoadRange or r > Rpos + globalLoadRange or c < Cpos - globalLoadRange or c > Cpos + globalLoadRange:
 					if grid[r][c] == null:
-						#create the tile in this coordinate
-						var tile = Tile.instantiate()
-						tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
-						tile.r = r
-						tile.c = c
-						tile.grid = self
-						add_child(tile)
-						grid[r][c] = tile
-						if map[r][c][0] == 1:
-							grid[r][c].isMine = true
-						if map[r][c][1] == 1:
-							grid[r][c].updateColor(1)
+						generateTile(r, c)
 					else: # There is currently no deletion because IT SUCKS
 						# This code does delete tiles, but it affects the wrong tiles as it seemingly randomly does not delete them and the code regenerates them
 						#remove_child(grid[r][c])
@@ -127,24 +117,28 @@ func initializeSurroundings(Rpos, Cpos):
 				elif findUnlockedZeroTiles(r, c) == true: #very innefficient to check every single tile, however, I could not figure out how to just check the edge
 					if grid[r][c] != null:
 						grid[r][c].uncover()
-								
+
 func actuallyInitializeSurroundings(Rpos, Cpos):
 	for r in range(Rpos - globalLoadRange - globalKillBorderWidth, Rpos + globalLoadRange + globalKillBorderWidth + 1):
 		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
 			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
-				var tile = Tile.instantiate()
-				tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
-				tile.r = r
-				tile.c = c
-				tile.grid = self
-				add_child(tile)
-				grid[r][c] = tile
-				if map[r][c][0] == 1:
-					grid[r][c].isMine = true
-				if map[r][c][1] == 1:
-					grid[r][c].updateColor(1)
-					
+				generateTile(r, c)
 
+func generateTile(r, c):
+	var tile = Tile.instantiate()
+	tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
+	tile.r = r
+	tile.c = c
+	tile.grid = self
+	add_child(tile)
+	grid[r][c] = tile
+	if map[r][c][0] == 1:
+		grid[r][c].isMine = true
+	grid[r][c].updateColor(map[r][c][1])
+
+
+
+					
 
 func findUnlockedZeroTiles(row, collumn):
 	for r in range(row-1, row+2):
@@ -171,14 +165,6 @@ func countLocalProximities(loadRange):
 					label.modulate = proxColors[proxCount]
 					if proxCount == 0:
 						label.text = ""
-#			if (r >= 0 and r <= rowCount and c >= 0 and c <= collumnCount):
-#				if findUnlockedZeroTiles(r, c) == true:
-#					var proxCount = countProximity(r,c)
-#					var label = grid[r][c].get_node("Proximity")
-#					label.text = str(proxCount)
-#					label.modulate = proxColors[proxCount]
-#					if proxCount == 0:
-#						label.text = ""
 #				else:
 #					#load hidden tiles
 #					pass
@@ -187,26 +173,20 @@ func countLocalProximities(loadRange):
 #Onto biome generation
 func initialBiomeGeneration():
 	var n = mapStartingSize
-	#var initialMap = define2DArray(n, 0)
 	var finalsize = size #redudant
 	var initialMap = ApplyBiomeValues(n)
 	var shadowMap = initialMap
-	var iterations = floor(log(finalsize)/log(2) - 3)
+	var iterations = floor(log(finalsize)/log(2) - 3) #this should work
 	iterations = mapScalingIndex #shhh
 	
-	#print2DArray(initialMap, n)
-	
 	for k in iterations:
-		
 		initialMap = zoom(shadowMap, n)
-		
+		print2DArray(initialMap, n)
 		n = (2*n)-1
-		#print2DArray(initialMap, n)
 		shadowMap = initialMap
 	
 	for k in mapSmoothingIndex:
 		initialMap = smooth(initialMap, n)
-		#print2DArray(initialMap, n-2)
 		n = n - 2
 		shadowMap = initialMap
 	map = defineMapArray(size, 0, 0)
@@ -215,45 +195,20 @@ func initialBiomeGeneration():
 		for j in n:
 			map[i][j][1] = initialMap[i][j]
 	
-func print2DArray(arr, n):
-	print(n)
-	for i in n:
-		var output = ""
-		for j in n:
-			if (arr[i][j] == 1):
-				output = str(output, "X ")
-			else:
-				output = str(output, "  ")
-		print(output)
-			
-			
-func define2DArray(size, value):
-	var arr = []
-	for i in size:
-		arr.append([])
-		for j in size:
-			arr[i].append(value)
-	return arr
-	
-func defineMapArray(size, value1, value2):
-	var arr = []
-	for i in size:
-		arr.append([])
-		for j in size:
-			arr[i].append([])
-			for k in 2:
-				arr[i][j].append(value1)
-	return arr
+
+
 
 func ApplyBiomeValues(size): #Currently very very simple, can be expanded upon a lot
 	size = size + 1
 	var bitmap = define2DArray(size, 0)
 	for i in size:
 		for j in size:
-			if (randi_range(0, 2) < 1):
+			if randi_range(0, 3) < 1:
 				bitmap[i][j] = 0 
-			else:
+			elif randi_range(0, 3) < 1:
 				bitmap[i][j] = 1
+			else:
+				bitmap[i][j] = 2
 	return bitmap
 
 func zoom(input, n):
@@ -262,20 +217,16 @@ func zoom(input, n):
 	for i in n:
 		for j in n:
 			output[i*2][j*2] = input[i][j]
-			#output.set(i * 2, j * 2, input[i * n + j])
 	for i in range(newN):
 		if i % 2 == 0:
 			for j in range(1, newN - 1, 2):
 				output[i][j] = pickOneRand(output[i][j - 1], output[i][j + 1], 0, 0, 2)
-				#output.set(i, j, pickOneRand(output.get(i, j - 1), output.get(i, j + 1), 0, 0, 2))
 		else:
 			for j in range(0, newN, 2):
 				output[i][j] = pickOneRand(output[i + 1][j], output[i - 1][j], 0, 0, 2)
-				#output.set(i, j, pickOneRand(output.get(i + 1, j), output.get(i - 1, j), 0, 0, 2))
 			for j in range(1, newN - 1, 2):
 				if output[i][j - 1] != 0 and output[i][j + 1] != 0 and output[i - 1][j] != 0 and output[i + 1][j] == 0:
 					output[i + 1][j] = output[i - 1][j]
-					#output.set(i + 1, j, output.get(i - 1, j))
 				output[i][j] = pickOneRand(output[i][j - 1], output[i][j + 1], output[i + 1][j], output[i - 1][j], 4)
 	return output
 
@@ -301,7 +252,37 @@ func pickOneRand(a, b, c, d, amount):
 	list.append(c)
 	list.append(d)
 	return list[randi_range(0, amount-1)]
+	
+	
 
+func print2DArray(arr, n): #Literally just for testing purposes
+	print(n)
+	for i in n:
+		var output = ""
+		for j in n:
+			if (arr[i][j] == 1):
+				output = str(output, "X ")
+			else:
+				output = str(output, "  ")
+		print(output)
+			
+func define2DArray(size, value):
+	var arr = []
+	for i in size:
+		arr.append([])
+		for j in size:
+			arr[i].append(value)
+	return arr
+	
+func defineMapArray(size, value1, value2):
+	var arr = []
+	for i in size:
+		arr.append([])
+		for j in size:
+			arr[i].append([])
+			for k in 2:
+				arr[i][j].append(value1)
+	return arr
 
 
 
@@ -312,7 +293,6 @@ func spawnBoss():
 	add_child(Boss)
 	Boss.position = Vector2(0,0)
 	Boss.setTarget(Player)
-	
 	var r = rowCount/2
 	var c = collumnCount-3
 	Goal = Goal.instantiate()
@@ -336,39 +316,6 @@ func spawnPlayer():
 	add_child(Player)
 	
 
-func createGrid():
-	for r in rowCount:
-		grid.append([])
-		for c in collumnCount:
-			var tile = Tile.instantiate()
-			tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
-			tile.r = r
-			tile.c = c
-			tile.grid = self
-			add_child(tile)
-			grid[r].append(tile)
-			
-func setBombs():
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	var bombs = 0
-	while bombs < bombCount:
-		var r = rng.randi()%rowCount
-		var c = rng.randi()%collumnCount
-		if !grid[r][c].isMine:
-			grid[r][c].isMine = true
-			bombs+=1
-
-func countProximities():
-	for r in rowCount:
-		for c in collumnCount:
-			var proxCount = countProximity(r,c)
-			var label = grid[r][c].get_node("Proximity")
-			label.text = str(proxCount)
-			label.modulate = proxColors[proxCount]
-			if proxCount == 0:
-				label.text = ""
-
 func countProximity(row, collumn):
 	var count = 0
 	for r in range(row-1, row+2):
@@ -376,7 +323,6 @@ func countProximity(row, collumn):
 			if(r >= 0 and r < rowCount and c >= 0 and c < collumnCount):
 				if(map[r][c][0] == 1): #Now uses the map for checking
 					count += 1
-					
 	return count
 	
 #Reikia queue
@@ -393,19 +339,55 @@ func updateBoard():
 	var r = Player.truePos.y/16
 	var c = Player.truePos.x/16
 	grid[r][c].uncover()
-	initializeSurroundings(r, c) #----------------------------------------------------------
+	updateSurroundings(r, c) #----------------------------------------------------------
 	countLocalProximities(globalLoadRange)
 	
 func isMine(r, c):
 	return grid[r][c].isMine
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	camera.position = camera.position.lerp(Player.truePos, delta*Player.movementSpeed*0.5)
 
 func isWin():
-	
 	var r = rowCount/2
 	var c = collumnCount-3
 	if (Player.truePos.y/16 == r and Player.truePos.x/16 == c):
 		return true
 	return false
+
+
+
+
+#func setBombs():
+#	var rng = RandomNumberGenerator.new()
+#	rng.randomize()
+#	var bombs = 0
+#	while bombs < bombCount:
+#		var r = rng.randi()%rowCount
+#		var c = rng.randi()%collumnCount
+#		if !grid[r][c].isMine:
+#			grid[r][c].isMine = true
+#			bombs+=1
+
+#func countProximities():
+#	for r in rowCount:
+#		for c in collumnCount:
+#			var proxCount = countProximity(r,c)
+#			var label = grid[r][c].get_node("Proximity")
+#			label.text = str(proxCount)
+#			label.modulate = proxColors[proxCount]
+#			if proxCount == 0:
+#				label.text = ""
+
+#func createGrid():
+#	for r in rowCount:
+#		grid.append([])
+#		for c in collumnCount:
+#			var tile = Tile.instantiate()
+#			tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
+#			tile.r = r
+#			tile.c = c
+#			tile.grid = self
+#			add_child(tile)
+#			grid[r].append(tile)
