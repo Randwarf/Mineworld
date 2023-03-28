@@ -1,94 +1,78 @@
-extends Node2D
-
-var rowCount
-var collumnCount
-var bombPercentage
-var bombCount
-var map = [] #[][] grid of values with an array inside [isMine, biomeIndex]. Currently just the isMine part, so, no triple array
-var grid = []
-var Tile = preload("res://Tile.tscn")
-var Player = preload("res://Player.tscn")
-var Boss = preload("res://Boss_WOF.tscn")
-var Goal = preload("res://Goal.tscn")
-var PlayerR
-var PlayerC
-var mapStartingSize = 3
-var mapScalingIndex = 5
-var mapSmoothingIndex = 3
-var size #change this to instead use iteration size maybe
-var globalLoadRange = 15
-var globalKillBorderWidth = 1
-var rng = RandomNumberGenerator.new()
-var mapInstance
-
-const proxColors = 	{1: Color(0,116.0/255,1),
-2: Color.DARK_GREEN,
-3: Color(1,0,0),
-4: Color(0,0,255.0/139),
-5: Color(126.0/255, 13/255.0, 45/255.0),
-6: Color(0,135/255.0,1),
-7: Color(0,0,0),
-8: Color(0.3,0.3,0.3),
-9: Color(1,1,1),
-0: Color(1,1,1)}
-var camera
-
-# MAKE THIS INTO SOME SORT OF A CLASS WHICH YOU CAN REFERENCE
+class_name Map extends Node2D
+#---internal classes---
 class biomeClass:
 	var name
 	var mineChance
 	var color
 	
-#Should store all the data for a biome
-#Currently that is mine spawnrate and coloring of the tiles
+class coordinates:
+	var r
+	var c
+	
+	func _init(rPos, cPos):
+		r = rPos
+		c = cPos
+	
+#---consts---
 const biomeDatas = [ 
 	[0.05, Color(0,0,0)],
 	[0.2, Color(0.5,0,0)],
 	[0.4, Color(0,0.5,0)]
 ]
-var biomeCount #How many biomes are enabled, latter ones are excluded
+const proxColors = 	{
+	1: Color(0,116.0/255,1),
+	2: Color.DARK_GREEN,
+	3: Color(1,0,0),
+	4: Color(0,0,255.0/139),
+	5: Color(126.0/255, 13/255.0, 45/255.0),
+	6: Color(0,135/255.0,1),
+	7: Color(0,0,0),
+	8: Color(0.3,0.3,0.3),
+	9: Color(1,1,1),
+	0: Color(1,1,1)
+}
+const mapStartingSize = 3
+const mapScalingIndex = 5
+const mapSmoothingIndex = 3
+const globalLoadRange = 15
+const globalKillBorderWidth = 1
+const biomeCount = 3
 
-func initializeBiomeData():
-	var biomeData = []
+#---variables---
+var size
+var rowCount
+var collumnCount
+var bombCount
+var map = [] #[][] grid of values with an array inside [isMine, biomeIndex]. Currently just the isMine part, so, no triple array
+var grid = []
+var Tile = preload("res://Tile.tscn")
+var rng = RandomNumberGenerator.new()
+var Player
 
-# Called when the node enters the scene tree for the first time.	
+
+
+# Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	size = mapStartingSize
-	for i in mapScalingIndex:
-		size = (2*size)-1
-	size = size - (mapSmoothingIndex*2)
-	
-	generate(size,size,0.15)
-	#setupMap(size, size, 0.15)		
-	setupCamera()
-
-func setupCamera():
-	camera = get_node("PlayerCamera")
-	camera.position = Player.position
-
-func setupMap(rC, cC, bP):
-	mapInstance = Map.new()
-	mapInstance.Player = Player
-	add_child(mapInstance)
-
-func generate(rC, cC, bP):
-	rowCount = rC
-	collumnCount = cC
-	bombPercentage = bP
-	PlayerR = rowCount/2
-	PlayerC = collumnCount/2
-	
+	calculateOptimalSize()
+	rowCount = size
+	collumnCount = size
 	grid = define2DArray(size, null)
 	initialBiomeGeneration()
 	createMapWithBombs()
 	clearStartingArea()
-	actuallyInitializeSurroundings(PlayerR, PlayerC)
-	spawnPlayer()
-	countLocalProximities(globalLoadRange)
+	actuallyInitializeSurroundings()
+	countLocalProximities()
 	updateBoard()
-	#spawnBoss()
 
+func calculateOptimalSize():
+	size = mapStartingSize
+	for i in mapScalingIndex:
+		size = (2*size)-1
+	size = size - (mapSmoothingIndex*2)
+
+func initializeBiomeData():
+	var biomeData = []
+	
 # Creates a map of integers that hold basic data for tile information
 # Will be expanded on when biomes are added
 func createMapWithBombs():
@@ -107,7 +91,6 @@ func addMine(chance):
 		return 1
 	else:
 		return 0
-
 
 # Creates tiles for the surrounding area of the player and destroys them outside it
 # This should be changed to instead initialize only the new tiles for better performace
@@ -129,7 +112,9 @@ func updateSurroundings(Rpos, Cpos):
 					if grid[r][c] != null:
 						grid[r][c].uncover()
 
-func actuallyInitializeSurroundings(Rpos, Cpos):
+func actuallyInitializeSurroundings():
+	var Rpos = Player.truePos.y/16
+	var Cpos = Player.truePos.x/16
 	for r in range(Rpos - globalLoadRange - globalKillBorderWidth, Rpos + globalLoadRange + globalKillBorderWidth + 1):
 		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
 			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
@@ -147,10 +132,6 @@ func generateTile(r, c):
 		grid[r][c].isMine = true
 	grid[r][c].updateColor(map[r][c][1])
 
-
-
-					
-
 func findUnlockedZeroTiles(row, collumn):
 	for r in range(row-1, row+2):
 		for c in range(collumn-1, collumn+2):
@@ -162,12 +143,11 @@ func findUnlockedZeroTiles(row, collumn):
 			else:
 				return false #This is kinda bad, defaults to not uncovering at the edge of the grid
 
-func countLocalProximities(loadRange):
+func countLocalProximities():
 	var pr = Player.truePos.y/16
 	var pc = Player.truePos.x/16
-
-	for r in range(pr - loadRange, pr + loadRange + 1):
-		for c in range(pc - loadRange, pc + loadRange + 1):
+	for r in range(pr - globalLoadRange, pr + globalLoadRange + 1):
+		for c in range(pc - globalLoadRange, pc + globalLoadRange + 1):
 			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
 				if grid[r][c] != null:
 					var proxCount = countProximity(r,c)
@@ -294,49 +274,6 @@ func defineMapArray(size, value1, value2):
 			for k in 2:
 				arr[i][j].append(value1)
 	return arr
-
-
-
-
-
-func spawnBoss():
-	Boss = Boss.instantiate()
-	add_child(Boss)
-	Boss.position = Vector2(0,0)
-	Boss.setTarget(Player)
-	var r = rowCount/2
-	var c = collumnCount-3
-	Goal = Goal.instantiate()
-	add_child(Goal)
-	Goal.position = Vector2(c, r) *16
-	clearArea(r,c,1)
-	
-func clearArea(Rpos,Cpos, radius):
-	for r in range(Rpos-radius, Rpos+radius+1):
-		for c in range(Cpos-radius, Rpos+radius+1):
-			map[r][c][0] = 0	#Now changes the map instead of the grid
-
-func clearStartingArea():
-	clearArea(PlayerR, PlayerC, 2)
-
-func spawnPlayer():
-	Player = preload("res://Player.tscn")
-	Player = Player.instantiate()
-	Player.position = Vector2(PlayerC, PlayerR) * 16
-	Player.grid = self
-	add_child(Player)
-	
-
-func countProximity(row, collumn):
-	var count = 0
-	for r in range(row-1, row+2):
-		for c in range(collumn-1, collumn+2):
-			if(r >= 0 and r < rowCount and c >= 0 and c < collumnCount):
-				if(map[r][c][0] == 1): #Now uses the map for checking
-					count += 1
-	return count
-	
-#Reikia queue
 func uncover(row, collumn, depth = 0):
 	if depth > 100:
 		return
@@ -345,60 +282,40 @@ func uncover(row, collumn, depth = 0):
 			if(r >= 0 and r < rowCount and c >= 0 and c < collumnCount):
 				if grid[r][c] != null:
 					grid[r][c].uncover(depth+1)
-				
+					
+func countProximity(row, collumn):
+	var count = 0
+	for r in range(row-1, row+2):
+		for c in range(collumn-1, collumn+2):
+			if(r >= 0 and r < rowCount and c >= 0 and c < collumnCount):
+				if(map[r][c][0] == 1): #Now uses the map for checking
+					count += 1
+	return count
+
+func isMine(r, c):
+	return grid[r][c].isMine
+	
+func clearArea(Rpos,Cpos, radius):
+	for r in range(Rpos-radius, Rpos+radius+1):
+		for c in range(Cpos-radius, Rpos+radius+1):
+			map[r][c][0] = 0	#Now changes the map instead of the grid
+
+func clearStartingArea():
+	var pos = calcPlayerLocation()
+	clearArea(pos.r, pos.c, 2)
+	
 func updateBoard():
 	var r = Player.truePos.y/16
 	var c = Player.truePos.x/16
 	grid[r][c].uncover()
 	updateSurroundings(r, c) #----------------------------------------------------------
-	countLocalProximities(globalLoadRange)
-	
-func isMine(r, c):
-	return grid[r][c].isMine
-	
+	countLocalProximities()
+
+func calcPlayerLocation():
+	var rPos = Player.truePos.y/16
+	var cPos = Player.truePos.x/16
+	return coordinates.new(rPos, cPos)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	camera.position = camera.position.lerp(Player.truePos, delta*Player.movementSpeed*0.5)
-
-func isWin():
-	var r = rowCount/2
-	var c = collumnCount-3
-	if (Player.truePos.y/16 == r and Player.truePos.x/16 == c):
-		return true
-	return false
-
-
-
-
-#func setBombs():
-#	var rng = RandomNumberGenerator.new()
-#	rng.randomize()
-#	var bombs = 0
-#	while bombs < bombCount:
-#		var r = rng.randi()%rowCount
-#		var c = rng.randi()%collumnCount
-#		if !grid[r][c].isMine:
-#			grid[r][c].isMine = true
-#			bombs+=1
-
-#func countProximities():
-#	for r in rowCount:
-#		for c in collumnCount:
-#			var proxCount = countProximity(r,c)
-#			var label = grid[r][c].get_node("Proximity")
-#			label.text = str(proxCount)
-#			label.modulate = proxColors[proxCount]
-#			if proxCount == 0:
-#				label.text = ""
-
-#func createGrid():
-#	for r in rowCount:
-#		grid.append([])
-#		for c in collumnCount:
-#			var tile = Tile.instantiate()
-#			tile.position = Vector2(c, r) * tile.get_node("TileUnopened").texture.get_width()
-#			tile.r = r
-#			tile.c = c
-#			tile.grid = self
-#			add_child(tile)
-#			grid[r].append(tile)
+	pass

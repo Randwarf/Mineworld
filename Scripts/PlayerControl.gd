@@ -57,6 +57,7 @@ func die():
 func _process(delta):
 	position = position.lerp(truePos, delta*movementSpeed)
 	if (position-truePos).length() < 0.1:
+		position = truePos
 		isMoving = false
 		animatedSprite.animation = "idle"
 	
