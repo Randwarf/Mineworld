@@ -4,15 +4,6 @@ class biomeClass:
 	var name
 	var mineChance
 	var color
-	
-class coordinates:
-	var r
-	var c
-	
-	func _init(rPos, cPos):
-		r = rPos
-		c = cPos
-	
 #---consts---
 const biomeDatas = [ 
 	[0.05, Color(0,0,0)],
@@ -47,7 +38,7 @@ var map = [] #[][] grid of values with an array inside [isMine, biomeIndex]. Cur
 var grid = []
 var Tile = preload("res://Tile.tscn")
 var rng = RandomNumberGenerator.new()
-var Player
+var Scene
 
 
 
@@ -113,8 +104,9 @@ func updateSurroundings(Rpos, Cpos):
 						grid[r][c].uncover()
 
 func actuallyInitializeSurroundings():
-	var Rpos = Player.truePos.y/16
-	var Cpos = Player.truePos.x/16
+	var playerPos = Scene.getPlayerPos()
+	var Rpos = playerPos.r
+	var Cpos = playerPos.c
 	for r in range(Rpos - globalLoadRange - globalKillBorderWidth, Rpos + globalLoadRange + globalKillBorderWidth + 1):
 		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
 			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
@@ -144,8 +136,9 @@ func findUnlockedZeroTiles(row, collumn):
 				return false #This is kinda bad, defaults to not uncovering at the edge of the grid
 
 func countLocalProximities():
-	var pr = Player.truePos.y/16
-	var pc = Player.truePos.x/16
+	var playerPos = Scene.getPlayerPos()
+	var pr = playerPos.r
+	var pc = playerPos.c
 	for r in range(pr - globalLoadRange, pr + globalLoadRange + 1):
 		for c in range(pc - globalLoadRange, pc + globalLoadRange + 1):
 			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
@@ -237,11 +230,7 @@ func smooth(input, n):
 	return output;
 
 func pickOneRand(a, b, c, d, amount):
-	var list = []
-	list.append(a)
-	list.append(b)
-	list.append(c)
-	list.append(d)
+	var list = [a,b,c,d]
 	return list[randi_range(0, amount-1)]
 	
 	
@@ -274,6 +263,7 @@ func defineMapArray(size, value1, value2):
 			for k in 2:
 				arr[i][j].append(value1)
 	return arr
+	
 func uncover(row, collumn, depth = 0):
 	if depth > 100:
 		return
@@ -301,20 +291,14 @@ func clearArea(Rpos,Cpos, radius):
 			map[r][c][0] = 0	#Now changes the map instead of the grid
 
 func clearStartingArea():
-	var pos = calcPlayerLocation()
+	var pos = Scene.getPlayerPos()
 	clearArea(pos.r, pos.c, 2)
 	
 func updateBoard():
-	var r = Player.truePos.y/16
-	var c = Player.truePos.x/16
-	grid[r][c].uncover()
-	updateSurroundings(r, c) #----------------------------------------------------------
+	var playerPos = Scene.getPlayerPos()
+	grid[playerPos.r][playerPos.c].uncover()
+	updateSurroundings(playerPos.r, playerPos.c) #----------------------------------------------------------
 	countLocalProximities()
-
-func calcPlayerLocation():
-	var rPos = Player.truePos.y/16
-	var cPos = Player.truePos.x/16
-	return coordinates.new(rPos, cPos)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

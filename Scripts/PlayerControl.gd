@@ -14,6 +14,8 @@ func _ready():
 	truePos = Vector2(position.x, position.y)
 	
 func _input(event): #fyi this triggers on every mouse movement, sooooooooo
+	if event is InputEventKey == false:
+		return
 	
 	if isDead:
 		return
@@ -22,7 +24,7 @@ func _input(event): #fyi this triggers on every mouse movement, sooooooooo
 		grid.updateBoard()
 		#queue up a move
 		#return
-		pass
+		return
 	if event.is_action_pressed("ui_up"):
 		truePos = Vector2(truePos.x, truePos.y-16)
 		isMoving = true
@@ -40,7 +42,7 @@ func _input(event): #fyi this triggers on every mouse movement, sooooooooo
 		isMoving = true
 		animatedSprite.animation = "walk_right"		
 	
-	if grid.isMine(truePos.y/16, truePos.x/16) == true:
+	if grid.isOnMine() == true:
 		die()
 	if grid.isWin() == true:
 		print("true")

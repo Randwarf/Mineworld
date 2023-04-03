@@ -1,9 +1,11 @@
 res://default_env.tres
 res://GridScene.tscn
 res://Default_Font.tres
-res://Scripts/Map.gd
 res://Scripts/GridController.gd
+res://Scripts/Map.gd
+res://Coordinates.gd
 res://Level select.tscn
 res://Player.tscn
 res://Tile.tscn
 res://Boss_WOF.tscn
+res://Scripts/PlayerControl.gd
