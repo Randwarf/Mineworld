@@ -60,7 +60,8 @@ func _ready():
 	size = size - (mapSmoothingIndex*2)
 	print(size)
 	generate(size,size,0.15)
-	setupMap(size, size, 0.15)		
+	setupMap(size, size, 0.15)	
+	spawnBoss()
 	setupCamera()
 
 func setupCamera():
@@ -80,7 +81,6 @@ func generate(rC, cC, bP):
 	PlayerC = collumnCount/2
 	
 	spawnPlayer()
-	#spawnBoss()
 
 func spawnBoss():
 	Boss = Boss.instantiate()
@@ -92,7 +92,7 @@ func spawnBoss():
 	Goal = Goal.instantiate()
 	add_child(Goal)
 	Goal.position = Vector2(c, r) *16
-	mapInstance.clearArea(r,c,1)
+	mapInstance.clearArea(r,c,2)
 
 func spawnPlayer():
 	Player = preload("res://Player.tscn")

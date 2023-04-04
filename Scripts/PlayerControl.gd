@@ -6,6 +6,8 @@ var grid
 var isDead = false
 var isMoving = false
 var truePos = Vector2(position.x, position.y)
+var moveQueue
+var currentDirection
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	animatedSprite = get_node("AnimatedSprite2D")
@@ -19,34 +21,31 @@ func _input(event): #fyi this triggers on every mouse movement, sooooooooo
 	
 	if isDead:
 		return
-	if isMoving:
-		#grid.initializeSurroundings(truePos.y/16, truePos.x/16)
-		grid.updateBoard()
-		#queue up a move
-		#return
-		return
 	if event.is_action_pressed("ui_up"):
-		truePos = Vector2(truePos.x, truePos.y-16)
-		isMoving = true
-		animatedSprite.animation = "walk_up"
+		if (isMoving and currentDirection != "up") or !isMoving:
+			moveQueue = "up"
 	elif event.is_action_pressed("ui_down"):
-		truePos = Vector2(truePos.x, truePos.y+16)		
-		isMoving = true		
-		animatedSprite.animation = "walk_down"
+		if (isMoving and currentDirection != "down") or !isMoving:	
+			moveQueue = "down"		
 	elif event.is_action_pressed("ui_left"):
-		truePos = Vector2(truePos.x-16, truePos.y)		
-		isMoving = true
-		animatedSprite.animation = "walk_left"
+		if (isMoving and currentDirection != "left") or !isMoving:	
+			moveQueue = "left"
 	elif event.is_action_pressed("ui_right"):
-		truePos = Vector2(truePos.x+16, truePos.y)		
-		isMoving = true
-		animatedSprite.animation = "walk_right"		
+		if (isMoving and currentDirection != "right") or !isMoving:	
+			moveQueue = "right"
 	
 	if grid.isOnMine() == true:
 		die()
 	if grid.isWin() == true:
 		print("true")
 		win()
+		
+	if isMoving:
+		#grid.initializeSurroundings(truePos.y/16, truePos.x/16)
+		grid.updateBoard()
+		#queue up a move
+		#return
+		return
 
 func win():
 	print("Winner winner chicken dinner")
@@ -63,3 +62,28 @@ func _process(delta):
 		isMoving = false
 		animatedSprite.animation = "idle"
 	
+	if !isMoving and moveQueue != null:
+		if moveQueue == "up":
+			truePos = Vector2(truePos.x, truePos.y-16)
+			isMoving = true
+			animatedSprite.animation = "walk_up"
+			moveQueue = null
+			currentDirection = "up"
+		elif moveQueue == "down":
+			truePos = Vector2(truePos.x, truePos.y+16)		
+			isMoving = true		
+			animatedSprite.animation = "walk_down"
+			moveQueue = null	
+			currentDirection = "down"
+		elif moveQueue == "left":
+			truePos = Vector2(truePos.x-16, truePos.y)		
+			isMoving = true
+			animatedSprite.animation = "walk_left"
+			moveQueue = null
+			currentDirection = "left"
+		elif moveQueue == "right":
+			truePos = Vector2(truePos.x+16, truePos.y)		
+			isMoving = true
+			animatedSprite.animation = "walk_right"
+			moveQueue = null
+			currentDirection = "right"

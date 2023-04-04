@@ -73,9 +73,9 @@ func createMapWithBombs():
 			if (map[r][c][1] == 0):
 				map[r][c][0] = addMine(0.05)
 			elif (map[r][c][1] == 1):
-				map[r][c][0] = addMine(0.2)
+				map[r][c][0] = addMine(0.1)
 			elif (map[r][c][1] == 2):
-				map[r][c][0] = addMine(0.4)
+				map[r][c][0] = addMine(0.2)
 
 func addMine(chance):
 	if rng.randf_range(0, 1) < chance:
