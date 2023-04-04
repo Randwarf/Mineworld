@@ -4,11 +4,16 @@ class biomeClass:
 	var name
 	var mineChance
 	var color
+	
+	func _init(n, mc, c):
+		name = n
+		mineChance = mc
+		color = c
 #---consts---
-const biomeDatas = [ 
-	[0.05, Color(0,0,0)],
-	[0.2, Color(0.5,0,0)],
-	[0.4, Color(0,0.5,0)]
+var biomeDatas = [ 
+	biomeClass.new("Easy",  0.05, Color(1,1,1)),
+	biomeClass.new("Medium",0.1,  Color(0.5,0,0)),
+	biomeClass.new("Hard",  0.15, Color(0,0,0.5))	
 ]
 const proxColors = 	{
 	1: Color(0,116.0/255,1),
@@ -70,12 +75,9 @@ func createMapWithBombs():
 	rng.randomize()
 	for r in rowCount:
 		for c in collumnCount:
-			if (map[r][c][1] == 0):
-				map[r][c][0] = addMine(0.05)
-			elif (map[r][c][1] == 1):
-				map[r][c][0] = addMine(0.1)
-			elif (map[r][c][1] == 2):
-				map[r][c][0] = addMine(0.2)
+			var biomeIndex = map[r][c][1]
+			var biomeMineChance = biomeDatas[biomeIndex].mineChance
+			map[r][c][0] = addMine(biomeMineChance)
 
 func addMine(chance):
 	if rng.randf_range(0, 1) < chance:
@@ -122,7 +124,8 @@ func generateTile(r, c):
 	grid[r][c] = tile
 	if map[r][c][0] == 1:
 		grid[r][c].isMine = true
-	grid[r][c].updateColor(map[r][c][1])
+	var color = biomeDatas[map[r][c][1]].color
+	grid[r][c].updateColor(color)
 
 func findUnlockedZeroTiles(row, collumn):
 	for r in range(row-1, row+2):

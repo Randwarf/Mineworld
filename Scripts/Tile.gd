@@ -9,13 +9,9 @@ var grid
 # 1 open | actually no, this is only true when "$Proximity.text == """" meaning it's 1 when a tile has no neighbors
 # 2 flagged
 # TODO: enum?
-func updateColor(biomeIndex): #Code to change the color based on biome index, not finished
-	if biomeIndex == 1:
-		$TileOpened.modulate = Color(0.5,0,0)
-		$TileUnopened.modulate = Color(0.5,0,0)
-	if biomeIndex == 2:
-		$TileOpened.modulate = Color(0,0,0.5)
-		$TileUnopened.modulate = Color(0,0,0.5)
+func updateColor(biomeColor): #Code to change the color based on biome index, not finished
+	$TileOpened.modulate = biomeColor
+	$TileUnopened.modulate = biomeColor
 
 func uncover(depth = 0):
 	$TileUnopened.visible = false

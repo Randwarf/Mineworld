@@ -8,3 +8,4 @@ res://Tile.tscn
 res://Boss_WOF.tscn
 res://Scripts/Map.gd
 res://Scripts/PlayerControl.gd
+res://Scripts/Tile.gd

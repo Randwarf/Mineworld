@@ -62,7 +62,7 @@ func _process(delta):
 		isMoving = false
 		animatedSprite.animation = "idle"
 	
-	if !isMoving and moveQueue != null:
+	if !isMoving and moveQueue != null and !isDead:
 		if moveQueue == "up":
 			truePos = Vector2(truePos.x, truePos.y-16)
 			isMoving = true
