@@ -1,19 +1,8 @@
 class_name Map extends Node2D
 #---internal classes---
-class biomeClass:
-	var name
-	var mineChance
-	var color
-	
-	func _init(n, mc, c):
-		name = n
-		mineChance = mc
-		color = c
 #---consts---
 var biomeDatas = [ 
-	biomeClass.new("Easy",  0.05, Color(1,1,1)),
-	biomeClass.new("Medium",0.1,  Color(0.5,0,0)),
-	biomeClass.new("Hard",  0.15, Color(0,0,0.5))	
+	
 ]
 const proxColors = 	{
 	1: Color(0,116.0/255,1),
@@ -32,7 +21,6 @@ const mapScalingIndex = 5
 const mapSmoothingIndex = 3
 const globalLoadRange = 15
 const globalKillBorderWidth = 1
-const biomeCount = 3
 
 #---variables---
 var size
@@ -190,12 +178,14 @@ func ApplyBiomeValues(size): #Currently very very simple, can be expanded upon a
 	var bitmap = define2DArray(size, 0)
 	for i in size:
 		for j in size:
-			if randi_range(0, 3) < 1:
-				bitmap[i][j] = 0 
-			elif randi_range(0, 3) < 1:
-				bitmap[i][j] = 1
-			else:
-				bitmap[i][j] = 2
+			var number = randi_range(0, biomeDatas.size()-1)
+			bitmap[i][j] = number
+			#if randi_range(0, biomeDatas.size()) < 1:
+			#	bitmap[i][j] = 0 
+			#elif randi_range(0, biomeDatas.size()) < 1:
+			#	bitmap[i][j] = 1
+			#else:
+			#	bitmap[i][j] = 2
 	return bitmap
 
 func zoom(input, n):

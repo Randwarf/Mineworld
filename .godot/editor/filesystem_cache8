@@ -1,26 +1,27 @@
 2a60927148abd1d33b818b535e306557
-::res://::1680594547
-Boss_WOF.tscn::PackedScene::5398811996887045036::1680535688::0::1::::<><>::res://Scripts/Boss_WOF.gd
+::res://::1681805760
+biomeClass.gd::GDScript::-1::1681805574::0::1::::biomeClass<>Node2D<>::
+Boss_WOF.tscn::PackedScene::5398811996887045036::1681805662::0::1::::<><>::res://Scripts/Boss_WOF.gd
 Comfortaa-Bold.ttf::FontFile::8020765923814539014::1677604010::1679388034::1::::<><>::
 Coordinates.gd::GDScript::-1::1680533540::0::1::::Coordinates<>Node2D<>::
-default_env.tres::Environment::2588510469891625388::1680535701::0::1::::<><>::
-Default_Font.tres::Theme::9049336665403547438::1680533246::0::1::::<><>::uid://dmjk3wn841b87
+default_env.tres::Environment::2588510469891625388::1681805698::0::1::::<><>::
+Default_Font.tres::Theme::9049336665403547438::1681804740::0::1::::<><>::uid://dmjk3wn841b87
 GameOver.gd::GDScript::-1::1679387755::0::1::::<>Node2D<>::
 GameOver.tscn::PackedScene::-1::1679387755::0::1::::<><>::res://Default_Font.tres<>res://GameOver.gd
 Goal.tscn::PackedScene::3460435333953822583::1679395196::0::1::::<><>::
-GridScene.tscn::PackedScene::6023812127048398973::1680535701::0::1::::<><>::res://Scripts/GridController.gd
+GridScene.tscn::PackedScene::6023812127048398973::1681805698::0::1::::<><>::res://Scripts/GridController.gd
 icon.png::CompressedTexture2D::2630706851123671645::1676967152::1679388034::1::::<><>::
-Level select.tscn::PackedScene::7116244320466266886::1680535687::0::1::::<><>::res://Scripts/Level select.gd
-Player.tscn::PackedScene::6603087008693603946::1680535688::0::1::::<><>::uid://dlxrqu0ncg518<>res://Scripts/PlayerControl.gd<>res://GameOver.tscn
+Level select.tscn::PackedScene::7116244320466266886::1681805661::0::1::::<><>::res://Scripts/Level select.gd
+Player.tscn::PackedScene::6603087008693603946::1681805661::0::1::::<><>::uid://dlxrqu0ncg518<>res://Scripts/PlayerControl.gd<>res://GameOver.tscn
 README.md::TextFile::-1::1676973381::0::1::::<><>::
-Tile.tscn::PackedScene::6091795053408197974::1680535688::0::1::::<><>::uid://bnt8ukjp6ejeo<>uid://bqm8b7b4jx632<>res://Scripts/Tile.gd<>uid://c0qinmc8k6rqg<>uid://cuf3fhv5p35dq
-::res://Scripts/::1680535683
+Tile.tscn::PackedScene::6091795053408197974::1681805662::0::1::::<><>::uid://bnt8ukjp6ejeo<>uid://bqm8b7b4jx632<>res://Scripts/Tile.gd<>uid://c0qinmc8k6rqg<>uid://cuf3fhv5p35dq
+::res://Scripts/::1681805661
 Boss_WOF.gd::GDScript::-1::1679393734::0::1::::<>Node2D<>::
-GridController.gd::GDScript::-1::1680535683::0::1::::<>Node2D<>::
-Level select.gd::GDScript::-1::1679388182::0::1::::<>Node2D<>::
-Map.gd::GDScript::-1::1680535500::0::1::::Map<>Node2D<>::
-PlayerControl.gd::GDScript::-1::1680535606::0::1::::<>Node2D<>::
-Tile.gd::GDScript::-1::1679990147::0::1::::<>Node2D<>::
+GridController.gd::GDScript::-1::1681805661::0::1::::<>Node2D<>::
+Level select.gd::GDScript::-1::1681805524::0::1::::<>Node2D<>::
+Map.gd::GDScript::-1::1681805574::0::1::::Map<>Node2D<>::
+PlayerControl.gd::GDScript::-1::1681805043::0::1::::<>Node2D<>::
+Tile.gd::GDScript::-1::1680596751::0::1::::<>Node2D<>::
 ::res://Sprites/::1679388035
 bg_default_mine.png::CompressedTexture2D::8017446153630743869::1676969858::1679388035::1::::<><>::
 crackedIce-1.png.png::CompressedTexture2D::7613793690633565341::1676969858::1679388034::1::::<><>::

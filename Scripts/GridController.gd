@@ -13,14 +13,16 @@ var camera
 
 # Called when the node enters the scene tree for the first time.	
 func _ready():
+	pass
 	
+func generate(Biomes):
 	size = mapStartingSize
 	for i in mapScalingIndex:
 		size = (2*size)-1
 	size = size - (mapSmoothingIndex*2)
 	print(size)
 	spawnPlayer()
-	setupMap(size, size, 0.15)	
+	setupMap(size, size, 0.15, Biomes)	
 	spawnBoss()
 	setupCamera()
 
@@ -28,9 +30,10 @@ func setupCamera():
 	camera = get_node("PlayerCamera")
 	camera.position = Player.position
 
-func setupMap(rC, cC, bP):
+func setupMap(rC, cC, bP, Biomes):
 	mapInstance = Map.new()
 	mapInstance.Scene = self
+	mapInstance.biomeDatas = Biomes
 	add_child(mapInstance)
 
 func spawnBoss():
