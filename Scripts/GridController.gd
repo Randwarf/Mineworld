@@ -3,6 +3,7 @@ extends Node2D
 var Player = preload("res://Player.tscn")
 var Boss = preload("res://Boss_WOF.tscn")
 var Goal = preload("res://Goal.tscn")
+var BiomeValues
 var mapStartingSize = 3
 var mapScalingIndex = 6
 var mapSmoothingIndex = 3
@@ -25,13 +26,14 @@ func generate(Biomes):
 	setupMap(size, size, 0.15, Biomes)	
 	spawnBoss()
 	setupCamera()
-	Player.initialized = true
+	#Player.initialized = true
 
 func setupCamera():
 	camera = get_node("PlayerCamera")
 	camera.position = Player.position
 
 func setupMap(rC, cC, bP, Biomes):
+	BiomeValues = Biomes
 	mapInstance = Map.new()
 	mapInstance.Scene = self
 	mapInstance.biomeDatas = Biomes
