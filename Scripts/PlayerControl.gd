@@ -1,6 +1,8 @@
 extends Node2D
 
-var movementSpeed = 15
+var storedMove = false
+var lives = 3
+var movementSpeed = 20
 var animatedSprite
 var grid
 var isDead = false
@@ -8,6 +10,7 @@ var isMoving = false
 var truePos = Vector2(position.x, position.y)
 var moveQueue
 var currentDirection
+var initialized = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	animatedSprite = get_node("AnimatedSprite2D")
@@ -22,23 +25,28 @@ func _input(event): #fyi this triggers on every mouse movement, sooooooooo
 	if isDead:
 		return
 	if event.is_action_pressed("ui_up"):
-		if (isMoving and currentDirection != "up") or !isMoving:
-			moveQueue = "up"
+		moveQueue = "up"
 	elif event.is_action_pressed("ui_down"):
-		if (isMoving and currentDirection != "down") or !isMoving:	
-			moveQueue = "down"		
+		moveQueue = "down"		
 	elif event.is_action_pressed("ui_left"):
-		if (isMoving and currentDirection != "left") or !isMoving:	
-			moveQueue = "left"
+		moveQueue = "left"
 	elif event.is_action_pressed("ui_right"):
-		if (isMoving and currentDirection != "right") or !isMoving:	
-			moveQueue = "right"
+		moveQueue = "right"
+		
+#	if event.is_action_pressed("ui_up"):
+#		if (isMoving and currentDirection != "up") or !isMoving:
+#			moveQueue = "up"
+#	elif event.is_action_pressed("ui_down"):
+#		if (isMoving and currentDirection != "down") or !isMoving:	
+#			moveQueue = "down"		
+#	elif event.is_action_pressed("ui_left"):
+#		if (isMoving and currentDirection != "left") or !isMoving:	
+#			moveQueue = "left"
+#	elif event.is_action_pressed("ui_right"):
+#		if (isMoving and currentDirection != "right") or !isMoving:	
+#			moveQueue = "right"
 	
-	if grid.isOnMine() == true:
-		die()
-	if grid.isWin() == true:
-		print("true")
-		win()
+	
 		
 	if isMoving:
 		#grid.initializeSurroundings(truePos.y/16, truePos.x/16)
@@ -54,13 +62,39 @@ func die():
 	var gameOver = get_node("GameOver")
 	gameOver.activate()
 	isDead = true
+	
+func moveCall(): #Is called once after a move is over
+	position = truePos
+	
+	animatedSprite.animation = "idle"
+	
+	if grid.isOnMine() == true:
+		if lives <= 0:
+			die()
+		else:
+			print(lives)
+			lives = lives - 1
+			grid.clearMapArea()
+			grid.updateBoard()
+	
+	if grid.isWin() == true:
+		print("true")
+		win()
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if initialized == false:
+		return
+	
+	if grid.mapInstance.grid[truePos.y/16][truePos.x/16].isWall:
+		truePos = position
+		
 	position = position.lerp(truePos, delta*movementSpeed)
+	storedMove = isMoving
 	if (position-truePos).length() < 0.1:
-		position = truePos
 		isMoving = false
-		animatedSprite.animation = "idle"
+		if (isMoving != storedMove):
+			moveCall()
 	
 	if !isMoving and moveQueue != null and !isDead:
 		if moveQueue == "up":

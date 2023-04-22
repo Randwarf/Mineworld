@@ -4,7 +4,7 @@ var Player = preload("res://Player.tscn")
 var Boss = preload("res://Boss_WOF.tscn")
 var Goal = preload("res://Goal.tscn")
 var mapStartingSize = 3
-var mapScalingIndex = 5
+var mapScalingIndex = 6
 var mapSmoothingIndex = 3
 var size #change this to instead use iteration size maybe
 var rng = RandomNumberGenerator.new()
@@ -25,6 +25,7 @@ func generate(Biomes):
 	setupMap(size, size, 0.15, Biomes)	
 	spawnBoss()
 	setupCamera()
+	Player.initialized = true
 
 func setupCamera():
 	camera = get_node("PlayerCamera")
@@ -61,6 +62,12 @@ func updateBoard():
 func isOnMine():
 	var pos = getPlayerPos()
 	return mapInstance.isMine(pos.r, pos.c)
+	
+func clearMapArea():
+	var pos = getPlayerPos()
+	var radius = 3
+	mapInstance.clearArea(pos.r, pos.c, radius)
+	mapInstance.updateImmediateBoard(radius)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

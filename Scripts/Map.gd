@@ -17,7 +17,7 @@ const proxColors = 	{
 	0: Color(1,1,1)
 }
 const mapStartingSize = 3
-const mapScalingIndex = 5
+const mapScalingIndex = 6
 const mapSmoothingIndex = 3
 const globalLoadRange = 15
 const globalKillBorderWidth = 1
@@ -59,13 +59,15 @@ func initializeBiomeData():
 	
 # Creates a map of integers that hold basic data for tile information
 # Will be expanded on when biomes are added
-func createMapWithBombs():
+func createMapWithBombs(): #Walls included
 	rng.randomize()
 	for r in rowCount:
 		for c in collumnCount:
 			var biomeIndex = map[r][c][1]
 			var biomeMineChance = biomeDatas[biomeIndex].mineChance
+			var biomeWallChance = biomeDatas[biomeIndex].wallChance
 			map[r][c][0] = addMine(biomeMineChance)
+			map[r][c][2] = addMine(biomeWallChance)
 
 func addMine(chance):
 	if rng.randf_range(0, 1) < chance:
@@ -93,6 +95,15 @@ func updateSurroundings(Rpos, Cpos):
 					if grid[r][c] != null:
 						grid[r][c].uncover()
 
+func updateImmediateSurroundings(Rpos, Cpos, radius):
+	for r in range(Rpos - globalLoadRange - globalKillBorderWidth, Rpos + globalLoadRange + globalKillBorderWidth + 1):
+		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
+			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
+				if map[r][c][0] == 1:
+					grid[r][c].isMine = true
+				else:
+					grid[r][c].isMine = false
+
 func actuallyInitializeSurroundings():
 	var playerPos = Scene.getPlayerPos()
 	var Rpos = playerPos.r
@@ -112,6 +123,9 @@ func generateTile(r, c):
 	grid[r][c] = tile
 	if map[r][c][0] == 1:
 		grid[r][c].isMine = true
+	if map[r][c][2] == 1:
+		grid[r][c].setWall()
+		map[r][c][0] = 0
 	var color = biomeDatas[map[r][c][1]].color
 	grid[r][c].updateColor(color)
 
@@ -165,7 +179,7 @@ func initialBiomeGeneration():
 		n = n - 2
 		shadowMap = initialMap
 	map = defineMapArray(size, 0, 0)
-	# OVERWRITES MAP FOR TESTING PURPOSES, DELETE LATER
+	# OVERWRITES MAP
 	for i in n:
 		for j in n:
 			map[i][j][1] = initialMap[i][j]
@@ -255,6 +269,7 @@ func defineMapArray(size, value1, value2):
 			arr[i].append([])
 			for k in 2:
 				arr[i][j].append(value1)
+				arr[i][j].append(value2)
 	return arr
 	
 func uncover(row, collumn, depth = 0):
@@ -286,6 +301,12 @@ func clearArea(Rpos,Cpos, radius):
 func clearStartingArea():
 	var pos = Scene.getPlayerPos()
 	clearArea(pos.r, pos.c, 2)
+
+func updateImmediateBoard(radius):
+	var playerPos = Scene.getPlayerPos()
+	grid[playerPos.r][playerPos.c].uncover()
+	updateImmediateSurroundings(playerPos.r, playerPos.c, radius) #----------------------------------------------------------
+	countLocalProximities()
 	
 func updateBoard():
 	var playerPos = Scene.getPlayerPos()

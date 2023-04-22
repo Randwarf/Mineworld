@@ -10,8 +10,8 @@ var BiomeBackup = [
 	biomeClass.new("Easy2",  0.08, Color(1,0.8,1)),
 	biomeClass.new("Medium",0.1,  Color(0.5,0,0)),
 	biomeClass.new("Medium2",0.14,  Color(0.5,0.5,0)),
-	biomeClass.new("Hard",  0.15, Color(0,0.5,0.9)),
-	biomeClass.new("Hard2",  0.18, Color(0,0,0.5))
+	biomeClass.new("Hard",  0.2, Color(0,0.5,0.9)),
+	biomeClass.new("Hard2",  0.25, Color(0,0,0.5), 0.1)
 ]
 			
 # Called when the node enters the scene tree for the first time.

@@ -1,6 +1,8 @@
 extends Node2D
 
+var locked = false
 var isMine = false
+var isWall = false
 var status = 0
 var r
 var c
@@ -12,14 +14,32 @@ var grid
 func updateColor(biomeColor): #Code to change the color based on biome index, not finished
 	$TileOpened.modulate = biomeColor
 	$TileUnopened.modulate = biomeColor
+	$TileMine.modulate = biomeColor
+	$TileWall.modulate = biomeColor
+
+func setWall():
+	isMine = false
+	isWall = true
+	locked = true
+	$TileOpened.visible = false
+	$Proximity.visible = false
+	$TileMine.visible = false
+	$TileWall.visible = true
 
 func uncover(depth = 0):
 	$TileUnopened.visible = false
-	if isMine:
-		$TileMine.visible = true
-	else:
-		$TileOpened.visible = true
-		$Proximity.visible = true
+	
+	if !locked:
+		if isMine:
+			$TileMine.visible = true
+		else:
+			$TileOpened.visible = true
+			$Proximity.visible = true
+			
+		if !isMine:
+			$TileMine.visible = false
+			$TileOpened.visible = true
+			$Proximity.visible = true
 		
 	if status == 0 and $Proximity.text == "":
 		status = 1
