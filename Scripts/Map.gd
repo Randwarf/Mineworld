@@ -100,7 +100,7 @@ func updateImmediateSurroundings(Rpos, Cpos, radius):
 		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
 			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
 				if map[r][c][0] == 1:
-					grid[r][c].isMine = true
+					grid[r][c].isMine = true #ULTRA RARE BUG?
 				else:
 					grid[r][c].isMine = false
 

@@ -4,6 +4,7 @@ var currentBiome
 var timeInBiome
 var storedMove = false
 var lives = 3
+var maxlives = 3
 var movementSpeed = 20
 var animatedSprite
 var grid
@@ -14,8 +15,10 @@ var moveQueue
 var currentDirection
 
 var obscureColor = Color(0.5,0,0,1)
-var colorLevel
+var colorLevel = 1
 var scaleLevel = 10
+var boom = preload("res://boom.tscn")
+var boomInstance
 
 #var initialized = false
 # Called when the node enters the scene tree for the first time.
@@ -72,18 +75,18 @@ func die():
 	isDead = true
 	
 func moveCall(): #Is called once after a move is over
-	position = truePos
-	
 	animatedSprite.animation = "idle"
-	
 	if grid.isOnMine() == true:
 		if lives <= 0:
 			die()
 		else:
-			print(lives)
-			lives = lives - 1
+#			print(lives)
+			lives -= 1
 			grid.clearMapArea()
 			grid.updateBoard()
+		boomInstance = boom.instantiate()
+		add_child(boomInstance)
+		grid.updateHealth()
 	
 	if grid.isWin() == true:
 		print("true")
@@ -101,25 +104,27 @@ func _process(delta):
 		
 	position = position.lerp(truePos, delta*movementSpeed)
 	storedMove = isMoving
-	if (position-truePos).length() < 0.1:
+	var dif = (position-truePos).length()
+	if dif < 0.1 and isMoving == true:
+		position = truePos
 		isMoving = false
-		if (isMoving != storedMove):
-			moveCall()
+		moveCall()
 	
 	detectMovement()
 
 
 func stormProcessing(delta):
-	if currentBiome != grid.mapInstance.map[position.y/16][position.x/16][1]:
+	#enter a different biome
+	if currentBiome != grid.mapInstance.map[truePos.y/16][truePos.x/16][1]:
 		timeInBiome = 0
 	timeInBiome = timeInBiome + delta
-	currentBiome = grid.mapInstance.map[position.y/16][position.x/16][1]
+	currentBiome = grid.mapInstance.map[truePos.y/16][truePos.x/16][1]
 	
 	if grid.BiomeValues[currentBiome].storm: #designated biome index for the zone
 		if $PlayerCamera/BigObscura.visible == false:
 			$PlayerCamera/BigObscura.visible = true
 		colorLevel = 1
-		$PlayerCamera/BigObscura.modulate = grid.BiomeValues[currentBiome].color
+		$PlayerCamera/BigObscura.modulate = grid.BiomeValues[currentBiome].color #shouldnt call every frame
 		if scaleLevel > 0.5:
 			scaleLevel = pow(1.1, -timeInBiome)*10
 			$PlayerCamera/BigObscura.scale = Vector2(scaleLevel, scaleLevel)

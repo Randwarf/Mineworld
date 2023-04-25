@@ -3,6 +3,7 @@ extends Node2D
 var Player = preload("res://Player.tscn")
 var Boss = preload("res://Boss_WOF.tscn")
 var Goal = preload("res://Goal.tscn")
+var healthLabel
 var BiomeValues
 var mapStartingSize = 3
 var mapScalingIndex = 6
@@ -14,7 +15,8 @@ var camera
 
 # Called when the node enters the scene tree for the first time.	
 func _ready():
-	pass
+	healthLabel = get_node("PlayerCamera/Health/Label")
+	healthLabel.text ="Initializing"
 	
 func generate(Biomes):
 	size = mapStartingSize
@@ -57,6 +59,10 @@ func spawnPlayer():
 	Player.position = Vector2(size/2, size/2) * 16
 	Player.grid = self
 	add_child(Player)
+	updateHealth()
+	
+func updateHealth():
+	healthLabel.text = "{0}/{1}".format({"0":Player.lives, "1":Player.maxlives})
 
 func updateBoard():
 	mapInstance.updateBoard()

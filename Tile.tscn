@@ -49,7 +49,6 @@ texture = ExtResource("5")
 [node name="TileWall" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(8, 8)
-scale = Vector2(1, 1)
 texture = ExtResource("6_6bfgl")
 
 [connection signal="gui_input" from="Control" to="." method="_on_Control_gui_input"]
