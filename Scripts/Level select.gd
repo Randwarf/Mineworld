@@ -1,5 +1,6 @@
 extends Node2D
 
+var grid = preload("res://GridScene.tscn")
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -23,34 +24,22 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func generate(Biomes):
-	var grid = preload("res://GridScene.tscn")
+func generate(Biomes, boss):
 	grid = grid.instantiate()
 	
 	
 	add_child(grid)
-	grid.generate(Biomes)
+	grid.generate(Biomes, boss)
 	
-	get_node("Control").visible=false
-	get_node("Control2").visible=false
-	get_node("Control3").visible=false
-	
+	get_node("CenterContainer").visible=false
 
-func _on_Control_gui_input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var Biomes = [ BiomeBackup[0], BiomeBackup[1] ]
-			generate(Biomes)
-			
-func _on_Control2_gui_input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var Biomes = [ BiomeBackup[2], BiomeBackup[3] ]
-			generate(Biomes)
+func _on_button_3_pressed():
+	get_tree().quit()
 
+func _on_button_2_pressed():
+	var Biomes = [ BiomeBackup[4], BiomeBackup[5] ]
+	generate(Biomes, "FROG")
 
-func _on_Control3_gui_input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var Biomes = [ BiomeBackup[4], BiomeBackup[5] ]
-			generate(Biomes)
+func _on_button_pressed():
+	var Biomes = [ BiomeBackup[2], BiomeBackup[3] ]
+	generate(Biomes, "WOF")

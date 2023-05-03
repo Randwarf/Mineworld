@@ -1,53 +1,55 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8nfre6rfo2sw"]
+[gd_scene load_steps=5 format=3 uid="uid://c8nfre6rfo2sw"]
 
 [ext_resource type="Script" path="res://Scripts/Level select.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://bqb7bsct3gnia" path="res://button.tscn" id="2_ml8i8"]
+
+[sub_resource type="Gradient" id="Gradient_numnc"]
+colors = PackedColorArray(0.346146, 2.3193e-05, 1.17319e-05, 1, 0.118581, 0.118581, 0.118581, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ql0jx"]
+gradient = SubResource("Gradient_numnc")
+fill_to = Vector2(0, 1)
 
 [node name="Level select" type="Node2D"]
 position = Vector2(449, 222)
 script = ExtResource("2")
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 33.0
-offset_bottom = 15.0
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -459.0
+offset_top = -236.0
+offset_right = 710.0
+offset_bottom = 430.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_ql0jx")
 
-[node name="Label" type="Label" parent="Control"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 14.0
-text = "Easy"
+[node name="CenterContainer" type="CenterContainer" parent="."]
+offset_left = -378.0
+offset_top = -19.0
+offset_right = -188.0
+offset_bottom = 183.0
 
-[node name="Control2" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 69.0
-offset_top = -2.0
-offset_right = 130.0
-offset_bottom = 16.0
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
 
-[node name="Label" type="Label" parent="Control2"]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 3.0
-offset_right = 55.0
-offset_bottom = 17.0
-text = "Medium"
+[node name="Button" parent="CenterContainer/VBoxContainer" instance=ExtResource("2_ml8i8")]
+layout_mode = 2
+text = "New Game - Wall
+"
 
-[node name="Control3" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 167.0
-offset_top = 1.0
-offset_right = 204.0
-offset_bottom = 17.0
+[node name="Button2" parent="CenterContainer/VBoxContainer" instance=ExtResource("2_ml8i8")]
+layout_mode = 2
+text = "New Game - Frog
+"
 
-[node name="Label" type="Label" parent="Control3"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 14.0
-text = "Hard"
+[node name="Button3" parent="CenterContainer/VBoxContainer" instance=ExtResource("2_ml8i8")]
+layout_mode = 2
+text = "Quit
+"
 
-[connection signal="gui_input" from="Control" to="." method="_on_Control_gui_input"]
-[connection signal="gui_input" from="Control2" to="." method="_on_Control2_gui_input"]
-[connection signal="gui_input" from="Control3" to="." method="_on_Control3_gui_input"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Button2" to="." method="_on_button_2_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Button3" to="." method="_on_button_3_pressed"]

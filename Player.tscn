@@ -142,6 +142,7 @@ animations = [{
 
 [node name="Player" type="Node2D"]
 z_index = 50
+texture_filter = 1
 script = ExtResource("2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

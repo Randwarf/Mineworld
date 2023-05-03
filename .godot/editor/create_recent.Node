@@ -1,4 +1,9 @@
 Sprite2D
+AnimatedSprite2D
+CenterContainer
+VBoxContainer
+TextureRect
+Button
 Node2D
 CanvasLayer
 Label

@@ -18,7 +18,7 @@ func _ready():
 	healthLabel = get_node("PlayerCamera/Health/Label")
 	healthLabel.text ="Initializing"
 	
-func generate(Biomes):
+func generate(Biomes, boss):
 	size = mapStartingSize
 	for i in mapScalingIndex:
 		size = (2*size)-1
@@ -26,7 +26,7 @@ func generate(Biomes):
 	print(size)
 	spawnPlayer()
 	setupMap(size, size, 0.15, Biomes)	
-	spawnBoss()
+	spawnBoss(boss)
 	setupCamera()
 	#Player.initialized = true
 
@@ -41,7 +41,13 @@ func setupMap(rC, cC, bP, Biomes):
 	mapInstance.biomeDatas = Biomes
 	add_child(mapInstance)
 
-func spawnBoss():
+func spawnBoss(boss):
+	if boss == "WOF":
+		spawnWOF()
+	elif boss == "FROG":
+		spawnFROG()
+
+func spawnWOF():
 	Boss = Boss.instantiate()
 	add_child(Boss)
 	Boss.position = Vector2(0,0)
@@ -52,6 +58,13 @@ func spawnBoss():
 	add_child(Goal)
 	Goal.position = Vector2(c, r) *16
 	mapInstance.clearArea(r,c,2)
+	
+func spawnFROG():
+	Boss = preload("res://Boss_FROG.tscn")
+	Boss = Boss.instantiate()
+	add_child(Boss)
+	Boss.position = Vector2(0,0)
+	Boss.setTarget(Player)
 
 func spawnPlayer():
 	Player = preload("res://Player.tscn")

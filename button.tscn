@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bqb7bsct3gnia"]
+
+[node name="Button" type="Button"]
+offset_right = 179.0
+offset_bottom = 64.0
+text = "New Game"

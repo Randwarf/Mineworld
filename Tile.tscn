@@ -11,17 +11,20 @@
 script = ExtResource("3")
 
 [node name="TileUnopened" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(8, 8)
 texture = ExtResource("2")
 
 [node name="TileOpened" type="Sprite2D" parent="."]
 visible = false
+texture_filter = 1
 position = Vector2(8, 8)
 texture = ExtResource("1")
 
 [node name="Proximity" type="Label" parent="."]
 visible = false
 modulate = Color(0, 0.415686, 1, 1)
+texture_filter = 1
 offset_left = 3.0
 offset_top = -4.0
 offset_right = 18.0
@@ -43,11 +46,13 @@ texture = ExtResource("4")
 
 [node name="TileMine" type="Sprite2D" parent="."]
 visible = false
+texture_filter = 1
 position = Vector2(8, 8)
 texture = ExtResource("5")
 
 [node name="TileWall" type="Sprite2D" parent="."]
 visible = false
+texture_filter = 1
 position = Vector2(8, 8)
 texture = ExtResource("6_6bfgl")
 
