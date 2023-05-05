@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://c1ct44ldnyjl7"]
+[gd_scene load_steps=19 format=3 uid="uid://c1ct44ldnyjl7"]
 
 [ext_resource type="Texture2D" uid="uid://dlxrqu0ncg518" path="res://Sprites/F_10.png" id="1"]
 [ext_resource type="Script" path="res://Scripts/PlayerControl.gd" id="2"]
 [ext_resource type="PackedScene" path="res://GameOver.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://u88dyrev0r2k" path="res://Sprites/woosh2.png" id="3_3ha0q"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("1")
@@ -158,6 +159,7 @@ zoom = Vector2(10000, 10000)
 [node name="BigObscura" type="Sprite2D" parent="PlayerCamera"]
 z_index = 4090
 position = Vector2(8, 8)
+texture = ExtResource("3_3ha0q")
 
 [node name="GameOver" parent="." instance=ExtResource("3")]
 z_index = 1000
