@@ -87,7 +87,7 @@ func isOnMine():
 func clearMapArea():
 	var pos = getPlayerPos()
 	var radius = 3
-	mapInstance.clearArea(pos.r, pos.c, radius)
+	mapInstance.clearGridMapArea(pos.r, pos.c, radius)
 	mapInstance.updateImmediateBoard(radius)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -95,14 +95,14 @@ func updateSurroundings(Rpos, Cpos):
 					if grid[r][c] != null:
 						grid[r][c].uncover()
 
-func updateImmediateSurroundings(Rpos, Cpos, radius):
-	for r in range(Rpos - globalLoadRange - globalKillBorderWidth, Rpos + globalLoadRange + globalKillBorderWidth + 1):
-		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
-			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
-				if map[r][c][0] == 1:
-					grid[r][c].isMine = true #ULTRA RARE BUG?
-				else:
-					grid[r][c].isMine = false
+#func updateImmediateSurroundings(Rpos, Cpos, radius):
+#	for r in range(Rpos - globalLoadRange - globalKillBorderWidth, Rpos + globalLoadRange + globalKillBorderWidth + 1):
+#		for c in range(Cpos - globalLoadRange - globalKillBorderWidth, Cpos + globalLoadRange + globalKillBorderWidth + 1):
+#			if (r >= 0 and r <= rowCount-1 and c >= 0 and c <= collumnCount-1):
+#				if map[r][c][0] == 1:
+#					grid[r][c].isMine = true #ULTRA RARE BUG?
+#				else:
+#					grid[r][c].isMine = false
 
 func actuallyInitializeSurroundings():
 	var playerPos = Scene.getPlayerPos()
@@ -298,6 +298,13 @@ func clearArea(Rpos,Cpos, radius):
 		for c in range(Cpos-radius, Rpos+radius+1):
 			map[r][c][0] = 0	#Now changes the map instead of the grid
 
+#copy of the top function with grid clearing as well. Did this because the top function runs once before grid exists
+func clearGridMapArea(Rpos,Cpos, radius): 
+	for r in range(Rpos-radius, Rpos+radius+1):
+		for c in range(Cpos-radius, Cpos+radius+1):
+			map[r][c][0] = 0
+			grid[r][c].isMine = false
+
 func clearStartingArea():
 	var pos = Scene.getPlayerPos()
 	clearArea(pos.r, pos.c, 2)
@@ -305,7 +312,7 @@ func clearStartingArea():
 func updateImmediateBoard(radius):
 	var playerPos = Scene.getPlayerPos()
 	grid[playerPos.r][playerPos.c].uncover()
-	updateImmediateSurroundings(playerPos.r, playerPos.c, radius) #----------------------------------------------------------
+	#updateImmediateSurroundings(playerPos.r, playerPos.c, radius) #----------------------------------------------------------
 	countLocalProximities()
 	
 func updateBoard():
