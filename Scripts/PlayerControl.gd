@@ -129,7 +129,7 @@ func stormProcessing(delta):
 		if scaleLevel > 0.5:
 			scaleLevel = pow(1.1, -timeInBiome)*5
 			$PlayerCamera/BigObscura.scale = Vector2(scaleLevel, scaleLevel)
-		if scaleLevel < 2.5 and calledBoss == false:
+		if scaleLevel < 1.75 and calledBoss == false:
 			calledBoss = true
 			grid.spawnSNIPER()
 	else:
@@ -165,3 +165,4 @@ func detectMovement():
 			animatedSprite.animation = "walk_right"
 			moveQueue = null
 			currentDirection = "right"
+

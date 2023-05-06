@@ -11,3 +11,4 @@ res://Boss_FROG.tscn
 res://boss_SNIPER.tscn
 res://Scripts/GridController.gd
 res://Scripts/PlayerControl.gd
+res://boss_SNIPER.gd

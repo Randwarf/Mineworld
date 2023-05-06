@@ -9,12 +9,11 @@ script = ExtResource("2")
 offset = Vector2(8, 8)
 zoom = Vector2(4, 4)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="PlayerCamera"]
-
 [node name="Health" type="Node2D" parent="PlayerCamera"]
-z_index = 4096
+z_index = 110
 
 [node name="Label" type="Label" parent="PlayerCamera/Health"]
+z_index = 110
 offset_left = -136.0
 offset_top = -73.0
 offset_right = -96.0
@@ -22,3 +21,5 @@ offset_bottom = -50.0
 size_flags_horizontal = 0
 text = "AAAAAAAAAAA
 "
+
+[node name="CanvasLayer" type="CanvasLayer" parent="PlayerCamera"]

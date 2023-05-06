@@ -50,6 +50,7 @@ func spawnBoss(boss):
 	elif boss == "FROG":
 		spawnFROG()
 	elif boss == "SNIPER":
+		#spawnSNIPER()
 		enableSniper = true
 
 func spawnWOF():
@@ -76,21 +77,20 @@ func spawnSNIPER():
 	Boss = Boss.instantiate()
 	add_child(Boss)
 	var cord = getPlayerPos()
-	var spawnRadius = 20
-	var minDist = 10
+	var spawnRadius = 5
+	var minDist = 1
 	var dist = 0
 	var randR
 	var randC
-	while dist < minDist:
+	while dist < minDist: #I literally just reroll over and over again, which may not be great here
 		randR = randi_range(cord.r - spawnRadius, cord.r + spawnRadius + 1)
 		randC = randi_range(cord.c - spawnRadius, cord.c + spawnRadius + 1)
 		if inStorm(randR, randC):
 			dist = calcPythagoras(cord.r, randR, cord.c, randC)
 		minDist = minDist * 0.95
-		print(dist)
-	print("found")
 	Boss.position.x = randR * 16
-	Boss.position.y = randC * 16 #add random spawn
+	Boss.position.y = randC * 16
+	Boss.setTarget(Player)
 	
 func calcPythagoras(r1, r2, c1, c2):
 	return sqrt(pow(abs(r1-r2),2) + pow(abs(c1-c2),2))

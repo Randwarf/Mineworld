@@ -157,7 +157,7 @@ offset = Vector2(8, 8)
 zoom = Vector2(10000, 10000)
 
 [node name="BigObscura" type="Sprite2D" parent="PlayerCamera"]
-z_index = 4090
+z_index = 100
 position = Vector2(8, 8)
 texture = ExtResource("3_3ha0q")
 
