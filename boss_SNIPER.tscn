@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://1tteo45bp5bu"]
+
+[ext_resource type="Script" path="res://boss_SNIPER.gd" id="1_li312"]
+[ext_resource type="Texture2D" uid="uid://dgqgcmtkxdidp" path="res://Sprites/crackedIce-1.png.png" id="2_rtfxa"]
+
+[node name="Boss_SNIPER" type="Node2D"]
+script = ExtResource("1_li312")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(8, 8)
+texture = ExtResource("2_rtfxa")
