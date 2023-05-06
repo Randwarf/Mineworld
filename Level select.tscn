@@ -47,9 +47,15 @@ text = "New Game - Frog
 
 [node name="Button3" parent="CenterContainer/VBoxContainer" instance=ExtResource("2_ml8i8")]
 layout_mode = 2
+text = "New Game - Sniper
+"
+
+[node name="ButtonQ" parent="CenterContainer/VBoxContainer" instance=ExtResource("2_ml8i8")]
+layout_mode = 2
 text = "Quit
 "
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Button2" to="." method="_on_button_2_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Button3" to="." method="_on_button_3_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonQ" to="." method="_on_button_q_pressed"]

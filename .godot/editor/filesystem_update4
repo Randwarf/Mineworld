@@ -8,5 +8,6 @@ res://Boss_WOF.tscn
 res://boom.tscn
 res://button.tscn
 res://Boss_FROG.tscn
-res://Scripts/Map.gd
+res://boss_SNIPER.tscn
 res://Scripts/GridController.gd
+res://Scripts/PlayerControl.gd

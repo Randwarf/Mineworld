@@ -1,10 +1,10 @@
 Sprite2D
+Node2D
 AnimatedSprite2D
 CenterContainer
 VBoxContainer
 TextureRect
 Button
-Node2D
 CanvasLayer
 Label
 ColorRect

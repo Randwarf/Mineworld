@@ -1,31 +1,33 @@
 2a60927148abd1d33b818b535e306557
-::res://::1683361643
-biomeClass.gd::GDScript::-1::1682190137::0::1::::biomeClass<>Node2D<>::
+::res://::1683392638
+biomeClass.gd::GDScript::-1::1683383404::0::1::::biomeClass<>Node2D<>::
 boom.gd::GDScript::-1::1683303362::0::1::::<>Node2D<>::
-boom.tscn::PackedScene::8903794109543489180::1683303834::0::1::::<><>::res://boom.gd<>uid://5cw6j5uopl57
+boom.tscn::PackedScene::8903794109543489180::1683392550::0::1::::<><>::res://boom.gd<>uid://5cw6j5uopl57
 Boss_FROG.gd::GDScript::-1::1683303362::0::1::::<>Node2D<>::
-Boss_FROG.tscn::PackedScene::6353028588587981391::1683303834::0::1::::<><>::res://Boss_FROG.gd<>uid://bk65o8qefbuh4
-Boss_WOF.tscn::PackedScene::5398811996887045036::1683303834::0::1::::<><>::res://Scripts/Boss_WOF.gd
-button.tscn::PackedScene::3513452238628963732::1683303834::0::1::::<><>::
+Boss_FROG.tscn::PackedScene::6353028588587981391::1683392550::0::1::::<><>::res://Boss_FROG.gd<>uid://bk65o8qefbuh4
+boss_SNIPER.gd::GDScript::-1::1683383718::0::1::::<>Node2D<>::
+boss_SNIPER.tscn::PackedScene::1865294659445413558::1683392550::0::1::::<><>::res://boss_SNIPER.gd<>uid://dgqgcmtkxdidp
+Boss_WOF.tscn::PackedScene::5398811996887045036::1683392550::0::1::::<><>::res://Scripts/Boss_WOF.gd
+button.tscn::PackedScene::3513452238628963732::1683392550::0::1::::<><>::
 Comfortaa-Bold.ttf::FontFile::8020765923814539014::1682084662::1682084662::1::::<><>::
 Coordinates.gd::GDScript::-1::1682084662::0::1::::Coordinates<>Node2D<>::
-default_env.tres::Environment::2588510469891625388::1683303834::0::1::::<><>::
-Default_Font.tres::Theme::9049336665403547438::1683303526::0::1::::<><>::uid://dmjk3wn841b87
+default_env.tres::Environment::2588510469891625388::1683392550::0::1::::<><>::
+Default_Font.tres::Theme::9049336665403547438::1683382339::0::1::::<><>::uid://dmjk3wn841b87
 GameOver.gd::GDScript::-1::1682084662::0::1::::<>Node2D<>::
 GameOver.tscn::PackedScene::-1::1682084662::0::1::::<><>::res://Default_Font.tres<>res://GameOver.gd
 Goal.tscn::PackedScene::3460435333953822583::1682084662::0::1::::<><>::
-GridScene.tscn::PackedScene::6023812127048398973::1683303834::0::1::::<><>::res://Scripts/GridController.gd
+GridScene.tscn::PackedScene::6023812127048398973::1683392550::0::1::::<><>::res://Scripts/GridController.gd
 icon.png::CompressedTexture2D::2630706851123671645::1682084662::1682084662::1::::<><>::
-Level select.tscn::PackedScene::7116244320466266886::1683303834::0::1::::<><>::res://Scripts/Level select.gd<>uid://bqb7bsct3gnia
-Player.tscn::PackedScene::6603087008693603946::1683303834::0::1::::<><>::uid://dlxrqu0ncg518<>res://Scripts/PlayerControl.gd<>res://GameOver.tscn<>uid://u88dyrev0r2k
+Level select.tscn::PackedScene::7116244320466266886::1683392550::0::1::::<><>::res://Scripts/Level select.gd<>uid://bqb7bsct3gnia
+Player.tscn::PackedScene::6603087008693603946::1683392550::0::1::::<><>::uid://dlxrqu0ncg518<>res://Scripts/PlayerControl.gd<>res://GameOver.tscn<>uid://u88dyrev0r2k
 README.md::TextFile::-1::1682084662::0::1::::<><>::
-Tile.tscn::PackedScene::6091795053408197974::1683303834::0::1::::<><>::uid://bnt8ukjp6ejeo<>uid://bqm8b7b4jx632<>res://Scripts/Tile.gd<>uid://c0qinmc8k6rqg<>uid://cuf3fhv5p35dq<>uid://c5vtn4di64y2x
-::res://Scripts/::1683303362
+Tile.tscn::PackedScene::6091795053408197974::1683392550::0::1::::<><>::uid://bnt8ukjp6ejeo<>uid://bqm8b7b4jx632<>res://Scripts/Tile.gd<>uid://c0qinmc8k6rqg<>uid://cuf3fhv5p35dq<>uid://c5vtn4di64y2x
+::res://Scripts/::1683392467
 Boss_WOF.gd::GDScript::-1::1682084662::0::1::::<>Node2D<>::
-GridController.gd::GDScript::-1::1683303362::0::1::::<>Node2D<>::
-Level select.gd::GDScript::-1::1683303362::0::1::::<>Node2D<>::
-Map.gd::GDScript::-1::1683303362::0::1::::Map<>Node2D<>::
-PlayerControl.gd::GDScript::-1::1683303362::0::1::::<>Node2D<>::
+GridController.gd::GDScript::-1::1683392467::0::1::::<>Node2D<>::
+Level select.gd::GDScript::-1::1683383621::0::1::::<>Node2D<>::
+Map.gd::GDScript::-1::1683362791::0::1::::Map<>Node2D<>::
+PlayerControl.gd::GDScript::-1::1683390374::0::1::::<>Node2D<>::
 Tile.gd::GDScript::-1::1682170360::0::1::::<>Node2D<>::
 ::res://Sprites/::1682184170
 bg_default_mine.png::CompressedTexture2D::8017446153630743869::1682084662::1682084662::1::::<><>::

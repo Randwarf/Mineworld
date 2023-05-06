@@ -13,6 +13,7 @@ var isMoving = false
 var truePos = Vector2(position.x, position.y)
 var moveQueue
 var currentDirection
+var calledBoss = false
 
 var obscureColor = Color(0.5,0,0,1)
 var colorLevel = 1
@@ -126,8 +127,11 @@ func stormProcessing(delta):
 		colorLevel = 1
 		$PlayerCamera/BigObscura.modulate = grid.BiomeValues[currentBiome].color #shouldnt call every frame
 		if scaleLevel > 0.5:
-			scaleLevel = pow(1.1, -timeInBiome)*10
+			scaleLevel = pow(1.1, -timeInBiome)*5
 			$PlayerCamera/BigObscura.scale = Vector2(scaleLevel, scaleLevel)
+		if scaleLevel < 2.5 and calledBoss == false:
+			calledBoss = true
+			grid.spawnSNIPER()
 	else:
 		if $PlayerCamera/BigObscura.visible == true:
 			colorLevel = colorLevel - 0.05

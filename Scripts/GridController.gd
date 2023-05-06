@@ -13,6 +13,8 @@ var rng = RandomNumberGenerator.new()
 var mapInstance
 var camera
 
+var enableSniper = false
+
 # Called when the node enters the scene tree for the first time.	
 func _ready():
 	healthLabel = get_node("PlayerCamera/Health/Label")
@@ -26,6 +28,7 @@ func generate(Biomes, boss):
 	print(size)
 	spawnPlayer()
 	setupMap(size, size, 0.15, Biomes)	
+	print(boss)
 	spawnBoss(boss)
 	setupCamera()
 	#Player.initialized = true
@@ -46,6 +49,8 @@ func spawnBoss(boss):
 		spawnWOF()
 	elif boss == "FROG":
 		spawnFROG()
+	elif boss == "SNIPER":
+		enableSniper = true
 
 func spawnWOF():
 	Boss = Boss.instantiate()
@@ -65,6 +70,33 @@ func spawnFROG():
 	add_child(Boss)
 	Boss.position = Vector2(0,0)
 	Boss.setTarget(Player)
+	
+func spawnSNIPER():
+	Boss = preload("res://boss_SNIPER.tscn")
+	Boss = Boss.instantiate()
+	add_child(Boss)
+	var cord = getPlayerPos()
+	var spawnRadius = 20
+	var minDist = 10
+	var dist = 0
+	var randR
+	var randC
+	while dist < minDist:
+		randR = randi_range(cord.r - spawnRadius, cord.r + spawnRadius + 1)
+		randC = randi_range(cord.c - spawnRadius, cord.c + spawnRadius + 1)
+		if inStorm(randR, randC):
+			dist = calcPythagoras(cord.r, randR, cord.c, randC)
+		minDist = minDist * 0.95
+		print(dist)
+	print("found")
+	Boss.position.x = randR * 16
+	Boss.position.y = randC * 16 #add random spawn
+	
+func calcPythagoras(r1, r2, c1, c2):
+	return sqrt(pow(abs(r1-r2),2) + pow(abs(c1-c2),2))
+	
+func inStorm(Rpos, Cpos):
+	return BiomeValues[mapInstance.map[Rpos][Cpos][1]].storm
 
 func spawnPlayer():
 	Player = preload("res://Player.tscn")
