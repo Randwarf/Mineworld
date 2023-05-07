@@ -43,7 +43,7 @@ func _on_button_3_pressed():
 	generate(Biomes, "SNIPER")
 
 func _on_button_2_pressed():
-	var Biomes = [ BiomeBackup[4], BiomeBackup[5] ]
+	var Biomes = [ BiomeBackup[4], BiomeBackup[1] ]
 	print('button2')
 	generate(Biomes, "FROG")
 
