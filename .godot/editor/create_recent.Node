@@ -1,6 +1,7 @@
+Sprite2D
+Timer
 Control
 Node2D
-Sprite2D
 AnimatedSprite2D
 CenterContainer
 VBoxContainer

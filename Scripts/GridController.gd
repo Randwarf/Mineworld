@@ -70,7 +70,7 @@ func spawnFROG():
 	Boss = Boss.instantiate()
 	add_child(Boss)
 	Boss.position = Vector2(0,0)
-	Boss.setTarget(Player)
+	Boss.Scene = self
 	
 func spawnSNIPER():
 	Boss = preload("res://boss_SNIPER.tscn")
@@ -116,11 +116,14 @@ func isOnMine():
 	var pos = getPlayerPos()
 	return mapInstance.isMine(pos.r, pos.c)
 	
+func clearMapAreaAnywhere(pos, radius):
+	mapInstance.clearGridMapArea(pos.r, pos.c, radius)
+	mapInstance.updateImmediateBoard(radius)
+
 func clearMapArea():
 	var pos = getPlayerPos()
 	var radius = 3
-	mapInstance.clearGridMapArea(pos.r, pos.c, radius)
-	mapInstance.updateImmediateBoard(radius)
+	clearMapAreaAnywhere(pos, radius)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
