@@ -78,21 +78,23 @@ func die():
 func moveCall(): #Is called once after a move is over
 	animatedSprite.animation = "idle"
 	if grid.isOnMine() == true:
-		if lives <= 0:
-			die()
-		else:
-#			print(lives)
-			lives -= 1
-			grid.clearMapArea()
-			grid.updateBoard()
-		boomInstance = boom.instantiate()
-		add_child(boomInstance)
-		grid.updateHealth()
-	
+		lowerLives(true)
 	if grid.isWin() == true:
 		print("true")
 		win()
-	
+
+func lowerLives(clearGrid):
+	if lives <= 0:
+		die()
+	else:
+		lives -= 1
+		grid.updateHealth()
+		if clearGrid:
+			grid.clearMapArea()
+			grid.updateBoard()
+			boomInstance = boom.instantiate()
+			add_child(boomInstance)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 #	if initialized == false:
@@ -166,3 +168,7 @@ func detectMovement():
 			moveQueue = null
 			currentDirection = "right"
 
+
+func _on_player_col_area_entered(area):
+	if area.name == "BulletCol":
+		lowerLives(false)

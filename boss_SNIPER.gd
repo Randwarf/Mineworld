@@ -1,5 +1,6 @@
 extends Node2D
 
+var bulletTscn = preload("res://bullet.tscn")
 var secWait = 0
 var strength = 0
 var target
@@ -22,12 +23,12 @@ func _process(delta):
 	if secWait > duration*trackingPercentage and closeFreeze == false:
 		frozenX = target.position.x
 		frozenY = target.position.y
+		var Bullet = bulletTscn.instantiate()
+		add_child(Bullet)
+		Bullet.setTarget(target)
 		closeFreeze = true
 	if secWait > duration:
 		secWait = 0
-		
-		#firing code here
-		
 		closeFreeze = false
 	strength = pow(2, 2*(secWait-duration))
 	queue_redraw()

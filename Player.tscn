@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c1ct44ldnyjl7"]
+[gd_scene load_steps=20 format=3 uid="uid://c1ct44ldnyjl7"]
 
 [ext_resource type="Texture2D" uid="uid://dlxrqu0ncg518" path="res://Sprites/F_10.png" id="1"]
 [ext_resource type="Script" path="res://Scripts/PlayerControl.gd" id="2"]
@@ -141,6 +141,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dmb47"]
+radius = 5.0
+height = 16.0
+
 [node name="Player" type="Node2D"]
 z_index = 50
 texture_filter = 1
@@ -164,3 +168,11 @@ texture = ExtResource("3_3ha0q")
 [node name="GameOver" parent="." instance=ExtResource("3")]
 z_index = 1000
 position = Vector2(8, 8)
+
+[node name="PlayerCol" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCol"]
+position = Vector2(8, 8)
+shape = SubResource("CapsuleShape2D_dmb47")
+
+[connection signal="area_entered" from="PlayerCol" to="." method="_on_player_col_area_entered"]

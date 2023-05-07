@@ -77,8 +77,8 @@ func spawnSNIPER():
 	Boss = Boss.instantiate()
 	add_child(Boss)
 	var cord = getPlayerPos()
-	var spawnRadius = 5
-	var minDist = 1
+	var spawnRadius = 4
+	var minDist = 2
 	var dist = 0
 	var randR
 	var randC
@@ -88,14 +88,16 @@ func spawnSNIPER():
 		if inStorm(randR, randC):
 			dist = calcPythagoras(cord.r, randR, cord.c, randC)
 		minDist = minDist * 0.95
-	Boss.position.x = randR * 16
-	Boss.position.y = randC * 16
+	Boss.position.y = randR * 16
+	Boss.position.x = randC * 16
 	Boss.setTarget(Player)
 	
 func calcPythagoras(r1, r2, c1, c2):
 	return sqrt(pow(abs(r1-r2),2) + pow(abs(c1-c2),2))
 	
 func inStorm(Rpos, Cpos):
+	print(Rpos, ' ', Cpos)
+	print(BiomeValues[mapInstance.map[Rpos][Cpos][1]].biomeName)
 	return BiomeValues[mapInstance.map[Rpos][Cpos][1]].storm
 
 func spawnPlayer():
