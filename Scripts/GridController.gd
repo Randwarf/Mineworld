@@ -72,13 +72,13 @@ func spawnFROG():
 	Boss.position = Vector2(0,0)
 	Boss.Scene = self
 	
-func spawnSNIPER():
+func spawnSNIPER(lives):
 	Boss = preload("res://boss_SNIPER.tscn")
 	Boss = Boss.instantiate()
 	add_child(Boss)
 	var cord = getPlayerPos()
-	var spawnRadius = 4
-	var minDist = 2
+	var spawnRadius = 15
+	var minDist = 10
 	var dist = 0
 	var randR
 	var randC
@@ -86,11 +86,12 @@ func spawnSNIPER():
 		randR = randi_range(cord.r - spawnRadius, cord.r + spawnRadius + 1)
 		randC = randi_range(cord.c - spawnRadius, cord.c + spawnRadius + 1)
 		if inStorm(randR, randC):
-			dist = calcPythagoras(cord.r, randR, cord.c, randC)
+			if !inObstruction(randR, randC):
+				dist = calcPythagoras(cord.r, randR, cord.c, randC)
 		minDist = minDist * 0.95
 	Boss.position.y = randR * 16
 	Boss.position.x = randC * 16
-	Boss.setTarget(Player)
+	Boss.setTarget(Player, self, lives)
 	
 func calcPythagoras(r1, r2, c1, c2):
 	return sqrt(pow(abs(r1-r2),2) + pow(abs(c1-c2),2))
@@ -99,6 +100,11 @@ func inStorm(Rpos, Cpos):
 	print(Rpos, ' ', Cpos)
 	print(BiomeValues[mapInstance.map[Rpos][Cpos][1]].biomeName)
 	return BiomeValues[mapInstance.map[Rpos][Cpos][1]].storm
+	
+func inObstruction(Rpos, Cpos):
+	if mapInstance.map[Rpos][Cpos][0] == 1 or mapInstance.map[Rpos][Cpos][2] == 1:
+		return true
+	return false
 
 func spawnPlayer():
 	Player = preload("res://Player.tscn")

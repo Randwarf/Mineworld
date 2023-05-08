@@ -1,6 +1,7 @@
 extends Node2D
 
 var bulletTscn = preload("res://bullet.tscn")
+var grid
 var secWait = 0
 var strength = 0
 var target
@@ -9,16 +10,24 @@ var frozenY = 0
 var closeFreeze = false
 var duration = 10
 var trackingPercentage = 0.95 #percent for how long in the duration it is tracking the player
+var lives
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
-func setTarget(toTarget):
+func setTarget(toTarget, toGrid, toLives):
+	lives = toLives
+	grid = toGrid
 	target = toTarget
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if target.position == position:
+		if (lives > 1):
+			grid.spawnSNIPER(lives - 1)
+		queue_free()
+	
 	secWait = secWait + delta
 	if secWait > duration*trackingPercentage and closeFreeze == false:
 		frozenX = target.position.x

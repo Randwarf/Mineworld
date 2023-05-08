@@ -1,34 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwrppnjsp8hyl"]
+[gd_scene load_steps=3 format=3 uid="uid://cwrppnjsp8hyl"]
 
 [ext_resource type="Script" path="res://Boss_FROG.gd" id="1_gjlk5"]
 [ext_resource type="Texture2D" uid="uid://bk65o8qefbuh4" path="res://Sprites/default_tower.png" id="2_srs84"]
-[ext_resource type="Texture2D" uid="uid://dhctxuue8uwxf" path="res://Sprites/target.png" id="3_tw2ua"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_gjlk5")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(8, 8)
 scale = Vector2(3, 3)
 texture = ExtResource("2_srs84")
-
-[node name="Cooldown" type="Timer" parent="."]
-wait_time = 5.0
-one_shot = true
-autostart = true
-
-[node name="LockIn" type="Timer" parent="."]
-wait_time = 3.0
-one_shot = true
-autostart = true
-
-[node name="Target" type="Sprite2D" parent="."]
-visible = false
-texture_filter = 1
-position = Vector2(8, 8)
-texture = ExtResource("3_tw2ua")
-offset = Vector2(8, 8)
-
-[connection signal="timeout" from="Cooldown" to="." method="_on_cooldown_timeout"]
-[connection signal="timeout" from="LockIn" to="." method="_on_lock_in_timeout"]

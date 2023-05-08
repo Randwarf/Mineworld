@@ -133,7 +133,7 @@ func stormProcessing(delta):
 			$PlayerCamera/BigObscura.scale = Vector2(scaleLevel, scaleLevel)
 		if scaleLevel < 1.75 and calledBoss == false:
 			calledBoss = true
-			grid.spawnSNIPER()
+			grid.spawnSNIPER(3) #SNIPER FIRST SUMMON
 	else:
 		if $PlayerCamera/BigObscura.visible == true:
 			colorLevel = colorLevel - 0.05

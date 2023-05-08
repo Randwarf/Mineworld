@@ -9,8 +9,8 @@ res://boom.tscn
 res://button.tscn
 res://Boss_FROG.tscn
 res://boss_SNIPER.tscn
-res://Scripts/GridController.gd
 res://bullet.tscn
-res://bullet.gd
 res://boss_SNIPER.gd
+res://Scripts/GridController.gd
 res://Scripts/PlayerControl.gd
+res://bullet.gd
