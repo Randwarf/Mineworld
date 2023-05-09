@@ -26,6 +26,8 @@ func _process(delta):
 	if target.position == position:
 		if (lives > 1):
 			grid.spawnSNIPER(lives - 1)
+		else:
+			grid.Victory()
 		queue_free()
 	
 	secWait = secWait + delta

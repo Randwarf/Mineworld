@@ -4,6 +4,7 @@ var Player = preload("res://Player.tscn")
 var Boss = preload("res://Boss_WOF.tscn")
 var Goal = preload("res://Goal.tscn")
 var healthLabel
+var heart
 var BiomeValues
 var mapStartingSize = 3
 var mapScalingIndex = 6
@@ -17,6 +18,7 @@ var enableSniper = false
 
 # Called when the node enters the scene tree for the first time.	
 func _ready():
+	heart = get_node("PlayerCamera/Health/Heart")
 	healthLabel = get_node("PlayerCamera/Health/Label")
 	healthLabel.text ="Initializing"
 	
@@ -112,21 +114,25 @@ func spawnPlayer():
 	Player.position = Vector2(size/2, size/2) * 16
 	Player.grid = self
 	add_child(Player)
-	updateHealth()
 	
 func updateHealth():
-	healthLabel.text = "{0}/{1}".format({"0":Player.lives, "1":Player.maxlives})
+	heart.frame += 1
+	#healthLabel.text = "{0}/{1}".format({"0":Player.lives, "1":Player.maxlives})
 
 func updateBoard():
 	mapInstance.updateBoard()
 	
 func isOnMine():
 	var pos = getPlayerPos()
+	return isMine(pos)
+	
+func isMine(pos):
 	return mapInstance.isMine(pos.r, pos.c)
 	
 func clearMapAreaAnywhere(pos, radius):
 	mapInstance.clearGridMapArea(pos.r, pos.c, radius)
-	mapInstance.updateImmediateBoard(radius)
+	mapInstance.updateImmediateBoard(pos, radius)
+	mapInstance.updateBoard()
 
 func clearMapArea():
 	var pos = getPlayerPos()
@@ -146,3 +152,9 @@ func isWin():
 
 func getPlayerPos():
 	return Coordinates.new(Player.truePos.y/16, Player.truePos.x/16)
+	
+func PlayerTakeDamage():
+	Player.lowerLives(false)
+	
+func Victory():
+	Player.win()

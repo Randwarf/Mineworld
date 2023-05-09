@@ -68,7 +68,10 @@ func _input(event): #fyi this triggers on every mouse movement, sooooooooo
 		return
 
 func win():
-	print("Winner winner chicken dinner")
+	var gameOver = get_node("GameOver")
+	gameOver.activate()
+	gameOver.updateText("Victory")
+	isDead = true
 
 func die():
 	var gameOver = get_node("GameOver")
@@ -84,11 +87,11 @@ func moveCall(): #Is called once after a move is over
 		win()
 
 func lowerLives(clearGrid):
+	grid.updateHealth()
 	if lives <= 0:
 		die()
 	else:
 		lives -= 1
-		grid.updateHealth()
 		if clearGrid:
 			grid.clearMapArea()
 			grid.updateBoard()

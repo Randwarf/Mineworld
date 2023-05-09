@@ -38,7 +38,7 @@ func _on_button_Q_pressed():
 	get_tree().quit()
 
 func _on_button_3_pressed():
-	var Biomes = [ BiomeBackup[5], BiomeBackup[6] ]
+	var Biomes = [ BiomeBackup[5]]
 	print('button3')
 	generate(Biomes, "SNIPER")
 

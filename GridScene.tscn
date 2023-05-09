@@ -1,6 +1,50 @@
-[gd_scene load_steps=2 format=3 uid="uid://cr28knk8dshpd"]
+[gd_scene load_steps=9 format=3 uid="uid://cr28knk8dshpd"]
 
 [ext_resource type="Script" path="res://Scripts/GridController.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://deuogasxnfi5" path="res://Sprites/heart.png" id="2_ty5ni"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yuy2e"]
+atlas = ExtResource("2_ty5ni")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypree"]
+atlas = ExtResource("2_ty5ni")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_88na1"]
+atlas = ExtResource("2_ty5ni")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oml6y"]
+atlas = ExtResource("2_ty5ni")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_umuor"]
+atlas = ExtResource("2_ty5ni")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_34o54"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yuy2e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypree")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_88na1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oml6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_umuor")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="GridScene" type="Node2D"]
 script = ExtResource("2")
@@ -13,6 +57,7 @@ zoom = Vector2(4, 4)
 z_index = 110
 
 [node name="Label" type="Label" parent="PlayerCamera/Health"]
+visible = false
 z_index = 110
 offset_left = -136.0
 offset_top = -73.0
@@ -21,5 +66,10 @@ offset_bottom = -50.0
 size_flags_horizontal = 0
 text = "AAAAAAAAAAA
 "
+
+[node name="Heart" type="AnimatedSprite2D" parent="PlayerCamera/Health"]
+texture_filter = 1
+position = Vector2(-118, -58)
+sprite_frames = SubResource("SpriteFrames_34o54")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="PlayerCamera"]

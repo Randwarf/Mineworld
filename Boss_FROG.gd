@@ -3,6 +3,7 @@ extends Node2D
 const TIME_BETWEEN_JUMPS = 5
 const TIME_UNTIL_LOCK_IN = 4
 
+var health
 var CooldownTimer
 var LockInTimer
 var TargetSprite
@@ -21,6 +22,7 @@ func _ready():
 	TargetSprite = get_node("Target")
 	FrogSprite = get_node("FrogSprite")
 	FrogSprite.play()
+	health = 25
 
 func setTarget():
 	targetInGrid = Scene.getPlayerPos()
@@ -35,13 +37,34 @@ func _process(delta):
 			isJumping = false
 			FrogSprite.animation="Land"
 			FrogSprite.play()
-			CooldownTimer.wait_time*0.95
+			CooldownTimer.wait_time = CooldownTimer.wait_time * 0.98
 			CooldownTimer.start()
-			LockInTimer.wait_time*0.95
+			LockInTimer.wait_time = LockInTimer.wait_time * 0.98
 			LockInTimer.start()
-			Scene.clearMapAreaAnywhere(targetInGrid, 2) #idk
+			health -= countMines()
+			Scene.clearMapAreaAnywhere(targetInGrid, 2) 
+			if health <= 0:
+				Scene.Victory()
+				CooldownTimer.stop()
+				LockInTimer.stop()
+			elif onPlayer():
+				Scene.PlayerTakeDamage()
 			
+func countMines():
+	var sum = 0
+	for r in range(position.y/16-1, position.y/16+2):
+		for c in range(position.x/16-1, position.x/16+2):
+			if Scene.isMine(Coordinates.new(r,c)):
+				sum+=1
+	return sum**2
 
+func onPlayer():
+	var ppos = Scene.getPlayerPos()
+	for r in range(position.y/16-1, position.y/16+2):
+		for c in range(position.x/16-1, position.x/16+2):
+			if r == ppos.r and c == ppos.c:
+				return true
+	return false
 func displayTarget():
 	TargetSprite.visible=true
 	TargetSprite.position = target-position+Vector2(8,8)

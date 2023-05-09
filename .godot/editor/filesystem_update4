@@ -11,3 +11,10 @@ res://Boss_FROG.tscn
 res://boss_SNIPER.tscn
 res://bullet.tscn
 res://Boss_FROG.gd
+res://Scripts/GridController.gd
+res://Scripts/PlayerControl.gd
+res://Scripts/Map.gd
+res://GameOver.tscn
+res://GameOver.gd
+res://Scripts/Level select.gd
+res://boss_SNIPER.gd

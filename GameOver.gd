@@ -19,3 +19,7 @@ func activate():
 func _process(delta):
 	if active:
 		background.modulate.a+=delta*100
+		
+func updateText(text):
+	var label = get_node("Label")
+	label.text = text

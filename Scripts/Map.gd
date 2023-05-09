@@ -309,9 +309,8 @@ func clearStartingArea():
 	var pos = Scene.getPlayerPos()
 	clearArea(pos.r, pos.c, 2)
 
-func updateImmediateBoard(radius):
-	var playerPos = Scene.getPlayerPos()
-	grid[playerPos.r][playerPos.c].uncover()
+func updateImmediateBoard(pos, radius):
+	grid[pos.r][pos.c].uncover()
 	#updateImmediateSurroundings(playerPos.r, playerPos.c, radius) #----------------------------------------------------------
 	countLocalProximities()
 	
