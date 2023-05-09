@@ -1,12 +1,123 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwrppnjsp8hyl"]
+[gd_scene load_steps=15 format=3 uid="uid://cwrppnjsp8hyl"]
 
 [ext_resource type="Script" path="res://Boss_FROG.gd" id="1_gjlk5"]
+[ext_resource type="Texture2D" uid="uid://d3s4mnb8ccieh" path="res://Sprites/frog.png" id="2_0cag6"]
 [ext_resource type="Texture2D" uid="uid://bk65o8qefbuh4" path="res://Sprites/default_tower.png" id="2_srs84"]
+[ext_resource type="Texture2D" uid="uid://dhctxuue8uwxf" path="res://Sprites/target.png" id="3_cd8li"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27n17"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(0, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ui6bf"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(48, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_itil3"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(96, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxdyf"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(96, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6kjeg"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(48, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_me48i"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(0, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_layju"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(0, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_78nby"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(48, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26mnk"]
+atlas = ExtResource("2_0cag6")
+region = Rect2(96, 0, 48, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fqhqo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27n17")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ui6bf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_itil3")
+}],
+"loop": false,
+"name": &"Jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jxdyf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6kjeg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_me48i")
+}],
+"loop": false,
+"name": &"Land",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_layju")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_78nby")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_26mnk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_gjlk5")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="FrogSprite" type="AnimatedSprite2D" parent="."]
+z_index = 1
 texture_filter = 1
+position = Vector2(8, 0)
+sprite_frames = SubResource("SpriteFrames_fqhqo")
+animation = &"Land"
+speed_scale = 4.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(8, 8)
 scale = Vector2(3, 3)
 texture = ExtResource("2_srs84")
+
+[node name="Cooldown" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="LockIn" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[node name="Target" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(8, 8)
+texture = ExtResource("3_cd8li")
+
+[connection signal="timeout" from="Cooldown" to="." method="_on_cooldown_timeout"]
+[connection signal="timeout" from="LockIn" to="." method="_on_lock_in_timeout"]

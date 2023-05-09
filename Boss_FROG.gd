@@ -6,6 +6,7 @@ const TIME_UNTIL_LOCK_IN = 4
 var CooldownTimer
 var LockInTimer
 var TargetSprite
+var FrogSprite
 var isJumping = false
 var jumpTime
 var target
@@ -18,6 +19,8 @@ func _ready():
 	CooldownTimer = get_node("Cooldown")
 	LockInTimer = get_node("LockIn")
 	TargetSprite = get_node("Target")
+	FrogSprite = get_node("FrogSprite")
+	FrogSprite.play()
 
 func setTarget():
 	targetInGrid = Scene.getPlayerPos()
@@ -27,8 +30,11 @@ func setTarget():
 func _process(delta):
 	if isJumping:
 		position = position.lerp(target, delta*10)
-		if (position - target).length() < 0.001:
+		if (position - target).length() < 1:
+			position = target
 			isJumping = false
+			FrogSprite.animation="Land"
+			FrogSprite.play()
 			CooldownTimer.wait_time*0.95
 			CooldownTimer.start()
 			LockInTimer.wait_time*0.95
@@ -38,12 +44,14 @@ func _process(delta):
 
 func displayTarget():
 	TargetSprite.visible=true
-	TargetSprite.position = target-position
+	TargetSprite.position = target-position+Vector2(8,8)
 func hideTarget():
 	TargetSprite.visible=false
 
 func _on_cooldown_timeout():
 	isJumping = true
+	FrogSprite.animation="Jump"
+	FrogSprite.play()
 	hideTarget()
 
 func _on_lock_in_timeout():
