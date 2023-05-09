@@ -16,7 +16,7 @@ func setTarget(targetSent):
 	var target_distance = sqrt(pow(global_position.x - targetSent.global_position.x + 8, 2) + pow(global_position.y - targetSent.global_position.y + 8, 2))
 	print(target_distance)
 	#target_angle = get_angle_to(targetSent.global_position)
-	velocity = Vector2(cos(target_angle), sin(target_angle)) * (baseSpeed + pow(target_distance/10, 2))
+	velocity = Vector2(cos(target_angle), sin(target_angle)) * (baseSpeed + target_distance)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
