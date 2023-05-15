@@ -1,8 +1,13 @@
+res://GameOver.gd
 res://default_env.tres
-res://Level select.tscn
+res://GameOver.tscn
 res://Default_Font.tres
+res://Level select.tscn
+res://Scripts/Level select.gd
 res://GridScene.tscn
+res://Scripts/GridController.gd
 res://Player.tscn
+res://Scripts/PlayerControl.gd
 res://Tile.tscn
 res://Boss_WOF.tscn
 res://boom.tscn
@@ -10,5 +15,3 @@ res://button.tscn
 res://Boss_FROG.tscn
 res://boss_SNIPER.tscn
 res://bullet.tscn
-res://GameOver.tscn
-res://bullet.gd

@@ -6,6 +6,7 @@ extends Node2D
 # var b = "text"
 var active = true
 var background
+var grid
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,3 +24,7 @@ func _process(delta):
 func updateText(text):
 	var label = get_node("Label")
 	label.text = text
+
+
+func _on_button_pressed():
+	grid.Back()

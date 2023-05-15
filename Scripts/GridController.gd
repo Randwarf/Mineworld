@@ -13,6 +13,7 @@ var size #change this to instead use iteration size maybe
 var rng = RandomNumberGenerator.new()
 var mapInstance
 var camera
+var menu
 
 var enableSniper = false
 
@@ -158,3 +159,6 @@ func PlayerTakeDamage():
 	
 func Victory():
 	Player.win()
+	
+func Back():
+	menu.Back()

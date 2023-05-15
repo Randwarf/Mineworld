@@ -29,6 +29,8 @@ func _ready():
 	animatedSprite.play()
 	truePos = Vector2(position.x, position.y)
 	timeInBiome = 0
+	var gameOver = get_node("GameOver")
+	gameOver.grid = self
 	
 func _input(event): #fyi this triggers on every mouse movement, sooooooooo
 	if event is InputEventKey == false:
@@ -175,3 +177,6 @@ func detectMovement():
 func _on_player_col_area_entered(area):
 	if area.name == "BulletCol":
 		lowerLives(false)
+		
+func Back():
+	grid.Back()

@@ -167,7 +167,7 @@ texture = ExtResource("3_3ha0q")
 
 [node name="GameOver" parent="." instance=ExtResource("3")]
 z_index = 1000
-position = Vector2(8, 8)
+position = Vector2(3, -6)
 
 [node name="PlayerCol" type="Area2D" parent="."]
 

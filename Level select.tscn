@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c8nfre6rfo2sw"]
+[gd_scene load_steps=6 format=3 uid="uid://c8nfre6rfo2sw"]
 
 [ext_resource type="Script" path="res://Scripts/Level select.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://bqb7bsct3gnia" path="res://button.tscn" id="2_ml8i8"]
@@ -9,6 +9,9 @@ colors = PackedColorArray(0.346146, 2.3193e-05, 1.17319e-05, 1, 0.118581, 0.1185
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ql0jx"]
 gradient = SubResource("Gradient_numnc")
 fill_to = Vector2(0, 1)
+
+[sub_resource type="Theme" id="Theme_i8kx4"]
+default_font_size = 128
 
 [node name="Level select" type="Node2D"]
 position = Vector2(449, 222)
@@ -54,6 +57,14 @@ text = "New Game - Sniper
 layout_mode = 2
 text = "Quit
 "
+
+[node name="Label" type="Label" parent="."]
+offset_left = -373.0
+offset_top = -173.0
+offset_right = 290.0
+offset_bottom = 5.0
+theme = SubResource("Theme_i8kx4")
+text = "Mineworld"
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Button2" to="." method="_on_button_2_pressed"]

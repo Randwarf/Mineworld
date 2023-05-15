@@ -31,6 +31,7 @@ func generate(Biomes, boss):
 	
 	add_child(grid)
 	grid.generate(Biomes, boss)
+	grid.menu = self
 	
 	get_node("CenterContainer").visible=false
 
@@ -51,6 +52,11 @@ func _on_button_pressed():
 	var Biomes = [ BiomeBackup[2], BiomeBackup[3] ]
 	generate(Biomes, "WOF")
 
-
 func _on_button_q_pressed():
-	pass # Replace with function body.
+	get_tree().quit()
+	
+func Back():
+	get_node("CenterContainer").visible=true
+	grid.queue_free()
+	grid = preload("res://GridScene.tscn")
+	
