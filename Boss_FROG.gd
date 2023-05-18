@@ -14,6 +14,7 @@ var target
 var targetInGrid
 var player
 var Scene
+var audio
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -22,7 +23,10 @@ func _ready():
 	TargetSprite = get_node("Target")
 	FrogSprite = get_node("FrogSprite")
 	FrogSprite.play()
+	audio = get_node("AudioStreamPlayer2D")
 	health = 25
+	FrogSprite.modulate = Color(1-health/25.0, health/25.0, 0)
+	
 
 func setTarget():
 	targetInGrid = Scene.getPlayerPos()
@@ -42,6 +46,9 @@ func _process(delta):
 			LockInTimer.wait_time = LockInTimer.wait_time * 0.98
 			LockInTimer.start()
 			health -= countMines()
+			print(Color(1.0-health/25.0, 1.0,1.0))
+			FrogSprite.modulate = Color(1-health/25.0, health/25.0, 0)
+			
 			Scene.clearMapAreaAnywhere(targetInGrid, 2) 
 			if health <= 0:
 				Scene.Victory()
@@ -75,6 +82,7 @@ func _on_cooldown_timeout():
 	isJumping = true
 	FrogSprite.animation="Jump"
 	FrogSprite.play()
+	audio.play()
 	hideTarget()
 
 func _on_lock_in_timeout():
