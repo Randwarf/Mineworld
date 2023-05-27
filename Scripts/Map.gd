@@ -320,6 +320,14 @@ func updateBoard():
 	updateSurroundings(playerPos.r, playerPos.c) #----------------------------------------------------------
 	countLocalProximities()
 
+func SetWalls(pos, radius):
+	var Rpos=pos.r
+	var Cpos=pos.c
+	for r in range(Rpos-radius, Rpos+radius+1):
+		for c in range(Cpos-radius, Cpos+radius+1):
+			map[r][c][2] = true
+			grid[r][c].setWall()
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass

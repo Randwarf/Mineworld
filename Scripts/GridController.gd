@@ -162,3 +162,6 @@ func Victory():
 	
 func Back():
 	menu.Back()
+	
+func setWalls(pos, radius):
+	mapInstance.SetWalls(pos, radius)

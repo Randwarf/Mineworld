@@ -107,8 +107,8 @@ func _process(delta):
 	
 	stormProcessing(delta)
 	
-	if grid.mapInstance.grid[truePos.y/16][truePos.x/16].isWall:
-		truePos = position
+	#if grid.mapInstance.grid[truePos.y/16][truePos.x/16].isWall:
+	#	truePos = position
 		
 	position = position.lerp(truePos, delta*movementSpeed)
 	storedMove = isMoving
@@ -149,24 +149,36 @@ func stormProcessing(delta):
 func detectMovement():
 	if !isMoving and moveQueue != null and !isDead:
 		if moveQueue == "up":
+			var temp = Vector2(truePos.x, truePos.y-16)
+			if grid.mapInstance.grid[temp.y/16][temp.x/16].isWall and grid.mapInstance.grid[truePos.y/16][truePos.x/16].isWall == false:
+				return
 			truePos = Vector2(truePos.x, truePos.y-16)
 			isMoving = true
 			animatedSprite.animation = "walk_up"
 			moveQueue = null
 			currentDirection = "up"
 		elif moveQueue == "down":
+			var temp = Vector2(truePos.x, truePos.y+16)
+			if grid.mapInstance.grid[temp.y/16][temp.x/16].isWall and grid.mapInstance.grid[truePos.y/16][truePos.x/16].isWall == false:
+				return
 			truePos = Vector2(truePos.x, truePos.y+16)		
 			isMoving = true		
 			animatedSprite.animation = "walk_down"
 			moveQueue = null	
 			currentDirection = "down"
 		elif moveQueue == "left":
+			var temp = Vector2(truePos.x-16, truePos.y)
+			if grid.mapInstance.grid[temp.y/16][temp.x/16].isWall and grid.mapInstance.grid[truePos.y/16][truePos.x/16].isWall == false:
+				return
 			truePos = Vector2(truePos.x-16, truePos.y)		
 			isMoving = true
 			animatedSprite.animation = "walk_left"
 			moveQueue = null
 			currentDirection = "left"
 		elif moveQueue == "right":
+			var temp = Vector2(truePos.x+16, truePos.y)
+			if grid.mapInstance.grid[temp.y/16][temp.x/16].isWall and grid.mapInstance.grid[truePos.y/16][truePos.x/16].isWall == false:
+				return
 			truePos = Vector2(truePos.x+16, truePos.y)		
 			isMoving = true
 			animatedSprite.animation = "walk_right"

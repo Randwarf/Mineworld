@@ -11,5 +11,8 @@ res://Boss_FROG.tscn
 res://boss_SNIPER.tscn
 res://bullet.tscn
 res://GameOver.tscn
+res://Themes/ButtonTheme.tres
 res://Boss_FROG.gd
-res://boom.gd
+res://Scripts/GridController.gd
+res://Scripts/Map.gd
+res://Scripts/PlayerControl.gd

@@ -50,6 +50,7 @@ func _process(delta):
 			FrogSprite.modulate = Color(1-health/25.0, health/25.0, 0)
 			
 			Scene.clearMapAreaAnywhere(targetInGrid, 2) 
+			Scene.setWalls(targetInGrid, 1)
 			if health <= 0:
 				Scene.Victory()
 				CooldownTimer.stop()
