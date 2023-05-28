@@ -1,10 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://cwrppnjsp8hyl"]
+[gd_scene load_steps=16 format=3 uid="uid://d2q6ksawk2h3"]
 
 [ext_resource type="Script" path="res://Boss_FROG.gd" id="1_gjlk5"]
 [ext_resource type="Texture2D" uid="uid://d3s4mnb8ccieh" path="res://Sprites/frog.png" id="2_0cag6"]
 [ext_resource type="Texture2D" uid="uid://bk65o8qefbuh4" path="res://Sprites/default_tower.png" id="2_srs84"]
 [ext_resource type="Texture2D" uid="uid://dhctxuue8uwxf" path="res://Sprites/target.png" id="3_cd8li"]
-[ext_resource type="AudioStream" uid="uid://cakwuvgsmbwe4" path="res://Boo-womp sound effect that they play on Spongebob when something sad happens.mp3" id="5_ynfba"]
+[ext_resource type="AudioStream" uid="uid://cakwuvgsmbwe4" path="res://Sounds/Boo-womp sound effect that they play on Spongebob when something sad happens.mp3" id="5_funng"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_27n17"]
 atlas = ExtResource("2_0cag6")
@@ -121,7 +121,7 @@ position = Vector2(8, 8)
 texture = ExtResource("3_cd8li")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_ynfba")
+stream = ExtResource("5_funng")
 
 [connection signal="timeout" from="Cooldown" to="." method="_on_cooldown_timeout"]
 [connection signal="timeout" from="LockIn" to="." method="_on_lock_in_timeout"]

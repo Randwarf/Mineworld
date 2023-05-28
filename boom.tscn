@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dy4cgnqakxt8w"]
+[gd_scene load_steps=4 format=3 uid="uid://crt4eicqsuxwo"]
 
 [ext_resource type="Script" path="res://boom.gd" id="1_i1tvd"]
 [ext_resource type="Texture2D" uid="uid://bvvnniyy6dfbc" path="res://Sprites/boom-1.png" id="2_3cqev"]
-[ext_resource type="AudioStream" uid="uid://bov51p7xl6gwa" path="res://tnt.mp3" id="3_urwnn"]
+[ext_resource type="AudioStream" uid="uid://bov51p7xl6gwa" path="res://Sounds/tnt.mp3" id="3_d8djx"]
 
 [node name="Boom" type="Node2D"]
 script = ExtResource("1_i1tvd")
@@ -12,5 +12,5 @@ position = Vector2(8, 8)
 texture = ExtResource("2_3cqev")
 
 [node name="Explosion" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_urwnn")
+stream = ExtResource("3_d8djx")
 autoplay = true

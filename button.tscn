@@ -4,7 +4,10 @@
 
 [node name="Button" type="Button"]
 texture_filter = 1
-offset_right = 266.0
-offset_bottom = 90.0
+offset_right = 112.0
+offset_bottom = 30.0
+scale = Vector2(0.986092, 0.978715)
 theme = ExtResource("1_vnfl4")
-text = "New Game"
+theme_override_font_sizes/font_size = 16
+text = "New Game
+"

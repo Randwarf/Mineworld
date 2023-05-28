@@ -1,4 +1,5 @@
 AudioStreamPlayer2D
+Node2D
 Label
 VBoxContainer
 AnimatedSprite2D
@@ -6,7 +7,6 @@ Sprite2D
 Timer
 CollisionShape2D
 Area2D
-Node2D
 Control
 CenterContainer
 TextureRect

@@ -1,18 +1,13 @@
 res://default_env.tres
+res://button.tscn
+res://Themes/ButtonTheme.tres
 res://Level select.tscn
-res://Default_Font.tres
 res://GridScene.tscn
 res://Player.tscn
 res://Tile.tscn
 res://Boss_WOF.tscn
 res://boom.tscn
-res://button.tscn
 res://Boss_FROG.tscn
 res://boss_SNIPER.tscn
 res://bullet.tscn
 res://GameOver.tscn
-res://Themes/ButtonTheme.tres
-res://Boss_FROG.gd
-res://Scripts/GridController.gd
-res://Scripts/Map.gd
-res://Scripts/PlayerControl.gd
