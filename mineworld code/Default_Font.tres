@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://d16tiugja0oh7"]
+
+[ext_resource type="FontFile" uid="uid://bwtk7pfmmrrn3" path="res://Themes/joystix monospace.otf" id="1_efwfv"]
+
+[resource]
+Label/fonts/font = ExtResource("1_efwfv")
